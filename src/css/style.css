@@ -1,0 +1,195 @@
+:root {
+    --color-primary: #facc15; /* or your brand yellow */
+  }
+
+/* TESTIMONIALS */
+.testimonial {
+    width: 65%;
+    position: relative;
+  }
+  
+  .testimonial::before {
+    content: "“";
+    position: absolute;
+    top: -5.7rem;
+    left: -6.8rem;
+    line-height: 1;
+    font-size: 20rem;
+    font-family: inherit;
+    color: var(--color-primary);
+    z-index: -1;
+  }
+  
+  .testimonial__header {
+    font-size: 2.25rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+  
+  .testimonial__text {
+    font-size: 1.7rem;
+    margin-bottom: 3.5rem;
+    color: #666;
+  }
+  
+  .testimonial__author {
+    margin-left: 3rem;
+    font-style: normal;
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    column-gap: 2rem;
+  }
+  
+  .testimonial__photo {
+    grid-row: 1/span 2;
+    width: 6.5rem;
+    border-radius: 50%;
+  }
+  
+  .testimonial__name {
+    font-size: 1.7rem;
+    font-weight: 500;
+    align-self: end;
+    margin: 0;
+  }
+  
+  .testimonial__location {
+    font-size: 1.5rem;
+  }
+  
+  .section__title--testimonials {
+    margin-bottom: 4rem;
+  }
+  
+
+  /*====================================================
+                       PARLIS
+======================================================*/
+.bg-parallax {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+  
+  #stats-cover {
+    background-image: url("/images/building-1.webp");
+  }
+  
+  #stats-cover .container {
+    min-height: 400px;
+  }
+  
+  /* @media only screen and (max-width: 2500px) {
+    #stats-cover {
+        background-image: url("/images/building-1.jpg");
+        margin-top: 0px;
+  
+    }
+  }
+  
+  @media only screen and (max-width: 1950px) {
+    #stats-cover {
+        background-image: url("/images/building-1.jpg");
+        margin-top: 0px;
+    }
+  } */
+  @media only screen and (max-width: 1200px) {
+    #stats-cover {
+      background-image: url("/images/building-1.webp");
+      margin-top: 0px;
+    }
+  }
+  @media only screen and (max-width: 992px) {
+    #stats-cover {
+      background-image: url("/images/building-1.webp");
+      margin-top: 0px;
+    }
+    #stats-cover .container {
+      min-height: 300px;
+    }
+  }
+  @media only screen and (max-width: 768px) {
+    #stats-cover {
+      background-image: url("/images/building-1.webp");
+      margin-top: 0px;
+    }
+    #stats-cover .container {
+      min-height: 300px;
+    }
+  }
+  @media only screen and (max-width: 576px) {
+    #stats-cover {
+      background-image: url("/images/building-1.webp");
+      margin-top: 0px;
+    }
+  }
+  #stats .content-box {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .stats-item {
+    padding: 100px 0;
+  }
+  
+  .stats-item i {
+    color: #34c6d3;
+  }
+  
+  #stats-cover h1 {
+    color: #fff !important;
+  }
+  
+  .stats-item h2 {
+    color: #fff;
+    font-size: 35px;
+    font-weight: 700;
+    margin-top: 15px;
+    margin-bottom: 1px;
+  }
+  
+  .stats-item p {
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 300;
+    margin-top: 0;
+  }
+  
+  #stats .content-box {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .stats-item {
+    padding: 100px 0;
+  }
+  
+  .stats-item i {
+    color: #29303B;
+  }
+  
+  .stats-item h2 {
+    color: #fff;
+    font-size: 35px;
+    font-weight: 700;
+    margin-top: 15px;
+    margin-bottom: 1px;
+  }
+  
+  .stats-item p {
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 300;
+    margin-top: 0;
+  }/*# sourceMappingURL=style.css.map */
+
+
+
+
+  /* globals.css */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
