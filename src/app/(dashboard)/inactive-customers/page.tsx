@@ -187,7 +187,7 @@ const InactiveCustomersList = () => {
         className="mt-6 bg-green-600 text-white px-4 py-2 rounded"
         disabled={finalEmailList.length === 0}
       >
-        Select/Create Coupon
+        Save and Go to Campaign
       </button>
     </div>
   );

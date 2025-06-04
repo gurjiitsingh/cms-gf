@@ -24,8 +24,6 @@ export type InactiveCustomer = {
   noOfferEmails?: boolean;
 };
 
-
-
 const TEST_EMAILS = [
   'gurjiitsingh2@gmail.com',
   'gagurjiitsingh@gmail.com',
@@ -33,28 +31,18 @@ const TEST_EMAILS = [
 ];
 
 const InactiveCustomersList = () => {
-
-    const {
-    setRecipients,
-    lastCampaign,
-    manualEmails,
-    setManualEmails,
-    emailsToRemove,
-    setEmailsToRemove,
-  } = useAppContext();
-
   const [mode, setMode] = useState<'manual' | 'auto'>('auto');
   const [customers, setCustomers] = useState<InactiveCustomer[]>([]);
   const [inactiveDays, setInactiveDays] = useState<number>(7);
-  //const [manualEmails, setManualEmails] = useState<string>('');
-  //const [emailsToRemove, setEmailsToRemove] = useState<string>('');
+  const [manualEmails, setManualEmails] = useState<string>('');
+  const [emailsToRemove, setEmailsToRemove] = useState<string>('');
   const [finalEmailList, setFinalEmailList] = useState<string[]>([]);
   const [unsubscribedEmails, setUnsubscribedEmails] = useState<string[]>([]);
   const [excludeLastCampaign, setExcludeLastCampaign] = useState(false);
   const [selectedTestEmails, setSelectedTestEmails] = useState<string[]>([]);
 
   const router = useRouter();
- 
+  const { setRecipients, lastCampaign } = useAppContext();
   const lc = lastCampaign?.emails?.length ?? 0;
 
   useEffect(() => {
