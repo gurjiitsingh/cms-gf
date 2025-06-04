@@ -1,5 +1,5 @@
 'use client';
-
+ 
 import React, { useState } from 'react';
 import { useAppContext } from '@/context/AppContext';
 import { useRouter } from 'next/navigation';
@@ -9,11 +9,11 @@ export default function TemplateSelector() {
   const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(null);
   const { setTemplate, coupons } = useAppContext();
   const router = useRouter();
-
+const recipient = "gurjiitsingh@gmal.com"
   const handleSelect = (id: number) => {
     setSelectedTemplateId(id);
 
-    const html = getTemplateHtml(id, coupons || []);
+    const html = getTemplateHtml(id, coupons || [], recipient);
 
     // Save the full template in context: templateId + rendered HTML
     setTemplate({
@@ -38,7 +38,7 @@ export default function TemplateSelector() {
           >
             <h2 className="text-lg font-semibold mb-2">Template {id}</h2>
             <div className="h-48 overflow-auto bg-gray-50 text-sm p-2 rounded">
-              <div dangerouslySetInnerHTML={{ __html: getTemplateHtml(id, coupons || []) }} />
+              <div dangerouslySetInnerHTML={{ __html: getTemplateHtml(id, coupons || [], recipient) }} />
             </div>
           </div>
         ))}

@@ -25,6 +25,7 @@ time:string | undefined;
 
 
 export const userSchima = z.object({
+  userId: z.string().optional(),
   username: z
   .string()
   .trim()

@@ -21,10 +21,13 @@ export async function syncNewOrders() {
       query(collection(db, "orderMaster"), orderBy("srno", "desc"))
     );
 
-    const orders = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...(doc.data() as orderMasterDataT),
-    }));
+   const orders = snapshot.docs.map((doc) => {
+  const data = doc.data() as orderMasterDataT;
+  return {
+    ...data,
+    id: doc.id, // ✅ overwrite after spreading to ensure it's your value
+  };
+});
 
     for (const order of orders) {
       const email = await fetchUserEmail(order.userId);

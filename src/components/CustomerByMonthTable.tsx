@@ -1,9 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { useTable } from '@tanstack/react-table'
 import { format } from 'date-fns'
-
 
 const dummyCustomers = [
   { id: 1, name: 'John Doe', email: 'john@example.com', createdAt: new Date('2025-05-01') },
@@ -25,22 +23,6 @@ export default function CustomerByMonthTable() {
     )
   }, [selectedMonth])
 
-  const columns = useMemo(
-    () => [
-      { Header: 'Name', accessor: 'name' },
-      { Header: 'Email', accessor: 'email' },
-      {
-        Header: 'Date',
-        accessor: (row: any) => format(row.createdAt, 'yyyy-MM-dd'),
-        id: 'createdAt',
-      },
-    ],
-    []
-  )
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data: filteredCustomers })
-
   return (
     <div className="p-6 bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-semibold mb-4">Customers by Month</h2>
@@ -52,47 +34,29 @@ export default function CustomerByMonthTable() {
         className="mb-4 p-2 border border-gray-300 rounded"
       />
 
-      <table {...getTableProps()} className="w-full text-left border border-gray-300">
+      <table className="w-full text-left border border-gray-300">
         <thead className="bg-gray-100">
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps()}
-                  key={column.id}
-                  className="px-4 py-2 border"
-                >
-                  {column.render('Header')}
-                </th>
-              ))}
-            </tr>
-          ))}
+          <tr>
+            <th className="px-4 py-2 border">Name</th>
+            <th className="px-4 py-2 border">Email</th>
+            <th className="px-4 py-2 border">Date</th>
+          </tr>
         </thead>
-
-        <tbody {...getTableBodyProps()}>
-          {rows.length === 0 ? (
+        <tbody>
+          {filteredCustomers.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="text-center py-4 text-gray-500">
+              <td colSpan={3} className="text-center py-4 text-gray-500">
                 No customers found for this month.
               </td>
             </tr>
           ) : (
-            rows.map((row) => {
-              prepareRow(row)
-              return (
-                <tr {...row.getRowProps()} key={row.id} className="hover:bg-gray-50">
-                  {row.cells.map((cell) => (
-                    <td
-                      {...cell.getCellProps()}
-                      key={cell.column.id}
-                      className="px-4 py-2 border"
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  ))}
-                </tr>
-              )
-            })
+            filteredCustomers.map((customer) => (
+              <tr key={customer.id} className="hover:bg-gray-50">
+                <td className="px-4 py-2 border">{customer.name}</td>
+                <td className="px-4 py-2 border">{customer.email}</td>
+                <td className="px-4 py-2 border">{format(customer.createdAt, 'yyyy-MM-dd')}</td>
+              </tr>
+            ))
           )}
         </tbody>
       </table>

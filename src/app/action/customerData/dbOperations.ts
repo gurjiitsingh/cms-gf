@@ -30,104 +30,88 @@ export interface InactiveCustomer {
   userId: string;
   lastOrderDate: string | null;
   updatedAt: string | null;
-  marketingConsent: boolean;
+ noOfferEmails: boolean;
 }
 
 
 export async function getInactiveCustomers_w(days: number): Promise<InactiveCustomer[]> {
   const now = new Date();
-  const cutoffDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);  // Calculate the cutoff date
-  console.log("Cutoff Date:", cutoffDate.toISOString());  // Log cutoff date for debugging
+  const cutoffDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+  console.log("Cutoff Date:", cutoffDate.toISOString());
 
   const customersRef = collection(db, "marketingData1");
-  const querySnapshot = await getDocs(customersRef);  // Fetch all customers
+  const querySnapshot = await getDocs(customersRef);
 
-  const inactiveCustomers = querySnapshot.docs
+  const inactiveCustomers: InactiveCustomer[] = querySnapshot.docs
     .map((doc) => {
       const data = doc.data();
-      const updatedAtRaw = data.updatedAt;
 
-      // Convert 'updatedAt' from Firestore Timestamp to Date and then to ISO string
-      let updatedAt: string;
-      if (updatedAtRaw && typeof updatedAtRaw.toDate === "function") {
-        updatedAt = updatedAtRaw.toDate().toISOString();  // Convert to ISO string
-      } else {
-        updatedAt = new Date(0).toISOString();  // Fallback to 1970 if it's invalid or missing
-      }
-
-      // Convert 'lastOrderDate' from Firestore Timestamp to Date and then to ISO string
-      let lastOrderDate: string;
-      if (data.lastOrderDate && typeof data.lastOrderDate.toDate === "function") {
-        lastOrderDate = data.lastOrderDate.toDate().toISOString();  // Convert to ISO string
-      } else {
-        lastOrderDate = new Date(0).toISOString();  // Fallback to 1970 if it's invalid or missing
-      }
+      const updatedAt = data.updatedAt?.toDate?.().toISOString() ?? new Date(0).toISOString();
+      const lastOrderDate = data.lastOrderDate?.toDate?.().toISOString() ?? new Date(0).toISOString();
 
       return {
         id: doc.id,
-        ...data,
-        updatedAt,         // Use ISO string for 'updatedAt'
-        lastOrderDate,     // Use ISO string for 'lastOrderDate'
+        name: data.name ?? "",
+        email: data.email ?? "",
+        userId: data.userId ?? "",
+        marketingConsent: data.marketingConsent ?? false,
+        noOfferEmails: data.noOfferEmails ?? false,
+        updatedAt,
+        lastOrderDate,
       };
     })
     .filter((customer) => {
       const updatedAt = new Date(customer.updatedAt);
       console.log("Comparing:", updatedAt.toISOString(), "with", cutoffDate.toISOString());
-
-      // Only include customers whose updatedAt is older than the cutoff date
       return updatedAt < cutoffDate;
     });
 
-  
-
   return inactiveCustomers;
 }
+
 
 
 export async function getInactiveCustomers1(days: number): Promise<InactiveCustomer[]> {
   const now = new Date();
-  const cutoffDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);  // Calculate the cutoff date
-  console.log("Cutoff Date:", cutoffDate.toISOString());  // Log cutoff date for debugging
+  const cutoffDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+  console.log("Cutoff Date:", cutoffDate.toISOString());
 
   const customersRef = collection(db, "marketingData1");
-  const querySnapshot = await getDocs(customersRef);  // Fetch all customers
+  const querySnapshot = await getDocs(customersRef);
 
-  const inactiveCustomers = querySnapshot.docs
+  const inactiveCustomers: InactiveCustomer[] = querySnapshot.docs
     .map((doc) => {
       const data = doc.data();
       const updatedAtRaw = data.updatedAt;
+      const lastOrderDateRaw = data.lastOrderDate;
 
-      // Log the raw 'updatedAt' value
       console.log(`Customer ${doc.id} - raw updatedAt:`, updatedAtRaw);
 
-      // Ensure 'updatedAt' is a valid Date object
-      let updatedAt: Date;
-      if (updatedAtRaw && typeof updatedAtRaw.toDate === "function") {
-        updatedAt = updatedAtRaw.toDate();  // Convert Firestore Timestamp to Date object
-      } else {
-        updatedAt = new Date(0);  // Fallback to 1970 if it's invalid or missing
-      }
-
-      console.log(`Customer ${doc.id} - updatedAt after conversion:`, updatedAt.toISOString());
+      // Safe date conversion
+      const updatedAt = updatedAtRaw?.toDate?.().toISOString() ?? new Date(0).toISOString();
+      const lastOrderDate = lastOrderDateRaw?.toDate?.().toISOString() ?? new Date(0).toISOString();
 
       return {
         id: doc.id,
-        ...data,
-        updatedAt: updatedAt.toISOString(),  // Return updatedAt as ISO string
+        name: data.name ?? "",
+        email: data.email ?? "",
+        userId: data.userId ?? "",
+        // marketingConsent: data.marketingConsent ?? false,
+        noOfferEmails: data.noOfferEmails ?? false, // ✅ required field
+        updatedAt,
+        lastOrderDate,
       };
     })
     .filter((customer) => {
       const updatedAt = new Date(customer.updatedAt);
       console.log("Comparing:", updatedAt.toISOString(), "with", cutoffDate.toISOString());
-
-      // Only include customers whose updatedAt is older than the cutoff date
       return updatedAt < cutoffDate;
     });
 
-  console.log("Inactive customers:", inactiveCustomers.map((c) => c.name));  // Log inactive customers' names for debugging
-
   return inactiveCustomers;
 }
+
+
 
 
 

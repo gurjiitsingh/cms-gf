@@ -23,6 +23,7 @@ setCoupons: (coupons: CouponT[]) => void;
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 type CouponT = {
+  id:string;
   code: string;
   discount: string | number;
   minSpend?: number;
@@ -61,7 +62,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         lastCampaign,
       })
     );
-    console.log("lastCampaign---------------", lastCampaign)
+    
   }, [recipients, coupons, template, lastCampaign]);
 
   // Setters

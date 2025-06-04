@@ -37,7 +37,15 @@ export async function POST(req: NextRequest) {
         results.push({ to: recipient, success: true, id: res.id });
       } catch (err) {
         console.error(`❌ Failed for ${recipient}:`, err);
-        results.push({ to: recipient, success: false, error: err.message });
+
+        let errorMsg = 'Unknown error';
+        if (err instanceof Error) {
+          errorMsg = err.message;
+        } else if (typeof err === 'string') {
+          errorMsg = err;
+        }
+
+        results.push({ to: recipient, success: false, error: errorMsg });
       }
     }
 
@@ -47,8 +55,14 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error('Mailgun error:', error);
+
+    let errorMsg = 'Failed to send email';
+    if (error instanceof Error) {
+      errorMsg = error.message;
+    }
+
     return NextResponse.json(
-      { error: 'Failed to send email', details: error },
+      { error: errorMsg },
       { status: 500 }
     );
   }

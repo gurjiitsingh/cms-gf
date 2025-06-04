@@ -79,22 +79,23 @@ export default function CampaignList() {
     });
   };
 
-  const handleUseGroup = () => {
-    const allSelectedEmails = Array.from(selectedGroups)
-      .flatMap(date => groupedEmails[date])
-      .filter(Boolean);
+const handleUseGroup = () => {
+  const allSelectedEmails = Array.from(selectedGroups)
+    .flatMap(date => groupedEmails[date])
+    .filter(Boolean);
 
-    const uniqueEmails = Array.from(new Set(allSelectedEmails));
+  const uniqueEmails = Array.from(new Set(allSelectedEmails));
 
-    setRecipients(uniqueEmails);
-    setLastCampaign({
-      id: 'manual-group',
-      emails: uniqueEmails,
-      createdAt: new Date(),
-    });
+  setRecipients(uniqueEmails);
+  setLastCampaign({
+    id: 'manual-group',
+    emails: uniqueEmails,
+    createdAt: new Date().toISOString(), // ✅ Convert Date to string
+  });
 
-    router.push('/select-inactive-customer');
-  };
+  router.push('/select-inactive-customer');
+};
+
 
   const selectedEmails = Array.from(selectedGroups)
     .flatMap(date => groupedEmails[date])

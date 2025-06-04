@@ -1,7 +1,7 @@
 export function getTemplateHtml(
   templateId: number,
   coupons: { code: string; discount: number | string; minSpend?: number }[],
- 
+ recipient:string,
 ) {
   if (!coupons || coupons.length === 0) {
     return '<p>No coupons selected.</p>';
@@ -11,7 +11,7 @@ export function getTemplateHtml(
     minSpend && minSpend > 0
       ? `<span style="display: block; font-size: 12px; margin-top: 4px; color:#777777;">Mindestbestellwert: €${minSpend}</span>`
       : '';
-
+ 
   if (templateId === 1) {
     return `
      <div className="flex flex-col items-center">

@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
     for (const recipient of to) {
       const unsubscribeUrl = `https://masala-gf.de/`; // or wherever your route is
-      const htmlTemplate = getTemplateHtml(templateId, coupons, recipient, unsubscribeUrl);
+      const htmlTemplate = getTemplateHtml(templateId, coupons, recipient);
 
   
 const result = await client.messages.create(DOMAIN, {

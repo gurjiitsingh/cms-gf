@@ -1,44 +1,50 @@
-// components/RecentOrders.tsx
-'use client'
+// src/components/ui/Table.tsx
+import React from 'react';
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+  ColumnDef,
+} from '@tanstack/react-table';
 
-import React from 'react'
-import Table from '@/components/ui/Table'
-import { ColumnDef } from '@tanstack/react-table'
-
-type Order = {
-  id: string
-  customer: string
-  total: number
-  date: string
+interface TableProps<T> {
+  columns: ColumnDef<T>[];
+  data: T[];
 }
 
-const orders: Order[] = [
-  { id: '001', customer: 'John Doe', total: 120.5, date: '2025-04-29' },
-  { id: '002', customer: 'Jane Smith', total: 85.0, date: '2025-05-01' },
-  { id: '003', customer: 'Bob Lee', total: 150.25, date: '2025-04-25' },
-  { id: '004', customer: 'Alice Ray', total: 92.0, date: '2025-05-03' },
-]
+export function Table<T>({ columns, data }: TableProps<T>) {
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
-const columns: ColumnDef<Order>[] = [
-  { accessorKey: 'id', header: 'Order ID' },
-  { accessorKey: 'customer', header: 'Customer' },
-  {
-    accessorKey: 'total',
-    header: 'Total',
-    cell: ({ getValue }) => `$${getValue<number>().toFixed(2)}`,
-  },
-  {
-    accessorKey: 'date',
-    header: 'Date',
-    cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
-  },
-]
-
-export default function RecentOrders() {
   return (
-    <div className="bg-white p-6 rounded shadow-md">
-      <h2 className="text-xl font-semibold mb-4">Orders This Week</h2>
-      <Table columns={columns} data={orders} />
+    <div className="overflow-x-auto">
+      <table className="min-w-full border text-sm text-left">
+        <thead>
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id} className="border px-4 py-2 bg-gray-100">
+                  {flexRender(header.column.columnDef.header, header.getContext())}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map(row => (
+            <tr key={row.id} className="hover:bg-gray-50">
+              {row.getVisibleCells().map(cell => (
+                <td key={cell.id} className="border px-4 py-2">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
-  )
+  );
 }

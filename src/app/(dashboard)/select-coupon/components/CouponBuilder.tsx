@@ -19,8 +19,8 @@ export default function CouponBuilder() {
   const searchParams = useSearchParams();
 
   // Get email from query param
-  const email = searchParams.get('email');
-console.log("email-------------",email )
+  const email = searchParams.get('email') as string;
+
   useEffect(() => {
     const q = query(collection(db, 'coupons'), orderBy('createdAt', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {

@@ -14,7 +14,15 @@ import { getInactiveCustomers } from '@/app/action/customerData/dbOperations';
 import { useAppContext } from '@/context/AppContext';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebaseConfig';
-import { InactiveCustomer } from './types';
+
+export type InactiveCustomer = {
+  id: string;
+  name: string;
+  email: string;
+  userId: string;
+  lastOrderDate?: string | null;
+  noOfferEmails?: boolean;
+};
 
 const TEST_EMAILS = [
   'gurjiitsingh2@gmail.com',
@@ -34,7 +42,7 @@ const InactiveCustomersList = () => {
 
   const router = useRouter();
   const { setRecipients, lastCampaign } = useAppContext();
-
+const lc = lastCampaign?.emails?.length ?? 0;
   useEffect(() => {
     const fetchUnsubscribed = async () => {
       try {
@@ -157,7 +165,7 @@ const InactiveCustomersList = () => {
       </div>
 
       <div className="mb-6">
-        <h4 className="text-lg font-semibold text-gray-800 mb-1">Add  Emails manually</h4>
+        <h4 className="text-lg font-semibold text-gray-800 mb-1">Add Emails manually</h4>
         <textarea
           value={manualEmails}
           onChange={(e) => setManualEmails(e.target.value)}
@@ -166,10 +174,9 @@ const InactiveCustomersList = () => {
         />
       </div>
 
- <h4 className="text-2xl mb-4 font-semibold text-gray-800">Remove Customer Emails </h4>
+      <h4 className="text-2xl mb-4 font-semibold text-gray-800">Remove Customer Emails</h4>
       <div className="mb-6">
-       
-        <h4 className="text-lg font-semibold text-gray-800 mb-1">Remove  Emails manually</h4>
+        <h4 className="text-lg font-semibold text-gray-800 mb-1">Remove Emails manually</h4>
         <textarea
           value={emailsToRemove}
           onChange={(e) => setEmailsToRemove(e.target.value)}
@@ -178,38 +185,34 @@ const InactiveCustomersList = () => {
         />
       </div>
 
+      {lc > 0 && (
+        <div className="mb-6">
+          <h4 className="text-lg font-semibold text-gray-800 mb-1">
+            Emails From Last Campaign ({lastCampaign?.emails?.length})
+          </h4>
+          <p className="text-sm text-gray-600 mb-2">
+            {excludeLastCampaign
+              ? 'These emails are currently being excluded from the final list.'
+              : 'These emails are included unless you choose to exclude them.'}
+          </p>
+          <textarea
+            readOnly
+            value={lastCampaign?.emails.join('\n')}
+            rows={Math.min(10, lastCampaign?.emails.length || 5)}
+            className="w-full border rounded p-2 bg-gray-50 text-sm text-gray-700"
+          />
+          <button
+            className={`mt-2 px-4 py-2 rounded text-white ${
+              excludeLastCampaign ? 'bg-red-600' : 'bg-blue-600'
+            } hover:opacity-90 transition`}
+            onClick={() => setExcludeLastCampaign((prev) => !prev)}
+          >
+            {excludeLastCampaign ? 'Undo Remove From Final List' : 'Remove From Final List'}
+          </button>
+        </div>
+      )}
 
-
-     
-
-     {lastCampaign?.emails?.length > 0 && (
-  <div className="mb-6">
-    <h4 className="text-lg font-semibold text-gray-800 mb-1">
-      Emails From Last Campaign ({lastCampaign.emails.length})
-    </h4>
-    <p className="text-sm text-gray-600 mb-2">
-      {excludeLastCampaign
-        ? 'These emails are currently being excluded from the final list.'
-        : 'These emails are included unless you choose to exclude them.'}
-    </p>
-    <textarea
-      readOnly
-      value={lastCampaign.emails.join('\n')}
-      rows={Math.min(10, lastCampaign.emails.length || 5)}
-      className="w-full border rounded p-2 bg-gray-50 text-sm text-gray-700"
-    />
-    <button
-      className={`mt-2 px-4 py-2 rounded text-white ${
-        excludeLastCampaign ? 'bg-red-600' : 'bg-blue-600'
-      } hover:opacity-90 transition`}
-      onClick={() => setExcludeLastCampaign((prev) => !prev)}
-    >
-      {excludeLastCampaign ? 'Undo Remove From Final List' : 'Remove From Final List'}
-    </button>
-  </div>
-)}
-
- <div>
+      <div>
         <button
           onClick={handleFindLastCampaignEmails}
           className="mt-2 mb-8 bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition"
@@ -217,7 +220,6 @@ const InactiveCustomersList = () => {
           Change Last Campaigns Email
         </button>
       </div>
-
 
       <div className="mb-6">
         <h4 className="text-lg font-semibold text-gray-800 mb-1">Unsubscribed Customers</h4>
@@ -230,11 +232,11 @@ const InactiveCustomersList = () => {
       </div>
 
       <div className="mb-6">
-              <h3 className="text-2xl mb-4 font-semibold text-gray-800">Final Email List</h3>
+        <h3 className="text-2xl mb-4 font-semibold text-gray-800">Final Email List</h3>
         <p className="text-sm text-gray-500 mb-1">
           Final list includes <strong>{finalEmailList.length}</strong> emails.
-          {excludeLastCampaign && lastCampaign?.emails?.length > 0 && (
-            <> (Excluded {lastCampaign.emails.length} from last campaign)</>
+          {excludeLastCampaign && lc > 0 && (
+            <> (Excluded {lastCampaign?.emails?.length} from last campaign)</>
           )}
         </p>
         <textarea

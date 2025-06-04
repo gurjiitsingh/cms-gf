@@ -1,12 +1,27 @@
 'use client'
+
 import { useEffect, useState } from "react";
-import { collection, deleteDoc, doc, getDocs, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  Timestamp,
+} from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import { format } from "date-fns";
 import { useAppContext } from "@/context/AppContext";
 
 export default function CampaignList() {
-  const [campaigns, setCampaigns] = useState([]);
+  type Campaign = {
+    id: string;
+    createdAt: Timestamp;
+    emails: string[];
+  };
+
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const pageSize = 5;
@@ -17,14 +32,21 @@ export default function CampaignList() {
     const fetchCampaigns = async () => {
       const q = query(collection(db, "campaignsSent"), orderBy("createdAt", "desc"));
       const snapshot = await getDocs(q);
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const data: Campaign[] = snapshot.docs.map(doc => {
+        const { createdAt, emails } = doc.data();
+        return {
+          id: doc.id,
+          createdAt: createdAt as Timestamp,
+          emails: emails as string[],
+        };
+      });
       setCampaigns(data);
       setLoading(false);
     };
     fetchCampaigns();
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     const confirmed = confirm("Are you sure you want to delete this campaign?");
     if (!confirmed) return;
     await deleteDoc(doc(db, "campaignsSent", id));
@@ -43,7 +65,9 @@ export default function CampaignList() {
         <div className="space-y-4">
           {paginatedCampaigns.map(c => (
             <div key={c.id} className="border p-4 rounded shadow-sm">
-              <p className="text-sm text-gray-600">{format(c.createdAt.toDate(), "PPPpp")}</p>
+              <p className="text-sm text-gray-600">
+                {format(c.createdAt.toDate(), "PPPpp")}
+              </p>
               <p className="mt-2 text-sm text-gray-800">
                 <strong>Emails:</strong> {c.emails.join(", ")}
               </p>
@@ -54,12 +78,17 @@ export default function CampaignList() {
                 >
                   Delete
                 </button>
-                <button
-                  onClick={() => setLastCampaign(c)}
-                  className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm"
-                >
-                  Set as Last Campaign
-                </button>
+              <button
+  onClick={() =>
+    setLastCampaign({
+      ...c,
+      createdAt: c.createdAt.toDate().toISOString(),
+    })
+  }
+  className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm"
+>
+  Set as Last Campaign
+</button>
               </div>
             </div>
           ))}

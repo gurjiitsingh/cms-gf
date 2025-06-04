@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type orderMasterDataT = {
   id: string;
   customerName: string;
@@ -18,6 +20,7 @@ export type orderMasterDataT = {
   calCouponDiscount: number;
   couponDiscountPercentL: number;
   pickUpDiscountPercentL: number;
+   createdAt?: Timestamp;
 };
 
 export type TOrderMaster = {

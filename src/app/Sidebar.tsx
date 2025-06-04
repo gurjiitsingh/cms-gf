@@ -60,7 +60,7 @@ export default function Sidebar() {
 
       <div className="flex justify-center gap-4 p-4">
         <button
-          onClick={() => setMode('old')}
+          // onClick={() => setMode('old')}
           className={`px-4 py-2 rounded font-semibold transition-colors duration-200 ${
             mode === 'old'
               ? 'bg-green-600 shadow-inner'

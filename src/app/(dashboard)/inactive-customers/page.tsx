@@ -11,9 +11,17 @@ import {
   TableCell,
 } from '@/components/ui/Table';
 import { getInactiveCustomers } from '@/app/action/customerData/dbOperations';
-import { InactiveCustomer } from './types';
+
 import { useAppContext } from '@/context/AppContext';
 import Link from 'next/link';
+export type InactiveCustomer = {
+  id: string;
+  name: string;
+  email: string;
+  userId: string;
+  lastOrderDate?: string | null;
+  noOfferEmails?: boolean;
+};
 
 const InactiveCustomersList = () => {
   const [customers, setCustomers] = useState<InactiveCustomer[]>([]);
@@ -41,7 +49,7 @@ const InactiveCustomersList = () => {
   // Update final list whenever inputs change
   useEffect(() => {
     const filteredEmails = customers
-      .filter((cust) => !cust.sendOfferEmail && cust.email)
+      .filter((cust) => !cust.noOfferEmails && cust.email)
       .map((cust) => cust.email);
 
     const manualEmailList = manualEmails
@@ -126,7 +134,7 @@ const InactiveCustomersList = () => {
                       })
                     : 'N/A'}
                 </TableCell>
-                <TableCell>{cust.sendOfferEmail ? '❌' : '✅'}</TableCell>
+                <TableCell>{cust.noOfferEmails ? '❌' : '✅'}</TableCell>
               </TableRow>
             ))}
           </TableBody>
