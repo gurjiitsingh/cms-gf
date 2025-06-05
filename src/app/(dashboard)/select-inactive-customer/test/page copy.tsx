@@ -20,10 +20,9 @@ type CampaignT = {
 };
 
 export default function CampaignList() {
-  console.log("tiiii----------------")
   const [campaigns, setCampaigns] = useState<CampaignT[]>([]);
   const [groupedEmails, setGroupedEmails] = useState<Record<string, string[]>>({});
-  const [daysFilter, setDaysFilter] = useState<number>(1);
+  const [daysFilter, setDaysFilter] = useState<number>(7); // Default to 7
   const [selectedGroups, setSelectedGroups] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
 
@@ -61,16 +60,34 @@ export default function CampaignList() {
       });
 
       const formattedGroups: Record<string, string[]> = {};
+      const newSelectedGroups = new Set<string>();
+
       for (const [key, value] of Object.entries(groups)) {
         formattedGroups[key] = Array.from(value);
+        newSelectedGroups.add(key);
       }
 
       setGroupedEmails(formattedGroups);
-      setSelectedGroups(new Set()); // reset selected on filter change
+      setSelectedGroups(newSelectedGroups);
+
+      // Automatically update context with initial selection
+      const allSelectedEmails = Array.from(newSelectedGroups)
+        .flatMap(date => formattedGroups[date])
+        .filter(Boolean);
+      const uniqueEmails = Array.from(new Set(allSelectedEmails));
+
+      setRecipients(uniqueEmails);
+      setLastCampaign({
+        id: 'auto-selected',
+        emails: uniqueEmails,
+        createdAt: new Date().toISOString(),
+      });
     };
 
-    groupByDate();
-  }, [campaigns, daysFilter]);
+    if (!loading) {
+      groupByDate();
+    }
+  }, [campaigns, daysFilter, loading]);
 
   const toggleGroup = (dateStr: string) => {
     setSelectedGroups(prev => {
@@ -80,28 +97,26 @@ export default function CampaignList() {
     });
   };
 
-const handleUseGroup = () => {
-  const allSelectedEmails = Array.from(selectedGroups)
-    .flatMap(date => groupedEmails[date])
-    .filter(Boolean);
+  const handleUseGroup = () => {
+    const allSelectedEmails = Array.from(selectedGroups)
+      .flatMap(date => groupedEmails[date])
+      .filter(Boolean);
 
-  const uniqueEmails = Array.from(new Set(allSelectedEmails));
-console.log("uniqueEmails--------------", uniqueEmails)
-  setRecipients(uniqueEmails);
-  setLastCampaign({
-    id: 'manual-group',
-    emails: uniqueEmails,
-    createdAt: new Date().toISOString(), // ✅ Convert Date to string
-  });
+    const uniqueEmails = Array.from(new Set(allSelectedEmails));
 
-  router.push('/select-inactive-customer');
-};
+    setRecipients(uniqueEmails);
+    setLastCampaign({
+      id: 'manual-group',
+      emails: uniqueEmails,
+      createdAt: new Date().toISOString(),
+    });
 
+    router.push('/select-inactive-customer');
+  };
 
   const selectedEmails = Array.from(selectedGroups)
     .flatMap(date => groupedEmails[date])
     .filter(Boolean);
-
   const uniqueSelectedEmails = Array.from(new Set(selectedEmails));
 
   const dayOptions = [1, 2, 3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15];

@@ -18,7 +18,9 @@ type CouponT = {
 
 type AppContextType = {
   recipients: string[];
+  oldRecipients: string[];
   setRecipients: (recipients: string[]) => void;
+  setOldRecipients: (recipients: string[]) => void;
   coupons: CouponT[];
   setCoupons: (coupons: CouponT[]) => void;
   template: { templateId: string; content: string } | null;
@@ -37,6 +39,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [recipients, setRecipientsState] = useState<string[]>([]);
+  const [oldRecipients, setOldRecipientsState] = useState<string[]>([]);
   const [coupons, setCouponsState] = useState<CouponT[]>([]);
   const [template, setTemplateState] = useState<{ templateId: string; content: string } | null>(null);
   const [lastCampaign, setLastCampaignState] = useState<CampaignType | null>(null);
@@ -45,6 +48,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [manualEmails, setManualEmailsState] = useState<string>('');
   const [emailsToRemove, setEmailsToRemoveState] = useState<string>('');
 
+  console.log("recipients------------------",recipients)
+
   // Load from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem('appContext');
@@ -52,6 +57,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed.recipients)) setRecipientsState(parsed.recipients);
+         if (Array.isArray(parsed.oldRecipients)) setOldRecipientsState(parsed.oldRecipients);
         if (Array.isArray(parsed.coupons)) setCouponsState(parsed.coupons);
         if (parsed.template?.templateId && parsed.template?.content) setTemplateState(parsed.template);
         if (parsed.lastCampaign?.emails) setLastCampaignState(parsed.lastCampaign);
@@ -77,11 +83,12 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         emailsToRemove,
       })
     );
-    console.log("coupons------------", coupons);
+  //  console.log("recipients------------", recipients);
   }, [recipients, coupons, template, lastCampaign, manualEmails, emailsToRemove]);
 
   // Setters
   const setRecipients = (recipients: string[]) => setRecipientsState(recipients);
+    const setOldRecipients = (oldRecipients: string[]) => setOldRecipientsState(oldRecipients);
   const setCoupons = (coupons: CouponT[]) => setCouponsState(coupons);
   const setTemplate = (template: { templateId: string; content: string }) => setTemplateState(template);
   const setLastCampaign = (campaign: CampaignType) => setLastCampaignState(campaign);
@@ -94,6 +101,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         recipients,
         setRecipients,
+        oldRecipients,
+        setOldRecipients,
         coupons,
         setCoupons,
         template,

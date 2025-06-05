@@ -14,13 +14,16 @@ import {
 // ADVANCE (default) routes – root-level
 const advanceNavItems = [
   { href: '/', label: 'Home', icon: <FaHome /> },
-  { href: '/users', label: 'Customers', icon: <FaUser /> },
+ 
   { href: '/campaigns', label: 'Campaigns', icon: <FaEnvelope /> },
   { href: '/campaigns/view', label: 'Campaigns View', icon: <FaEnvelope /> },
-  { href: '/orders', label: 'Orders', icon: <FaClipboardList /> },
   { href: '/inactive-customers', label: 'Inactive Customers', icon: <FaCalendarTimes /> },
-  { href: '/send-email', label: 'Send Email', icon: <FaUser /> },
-];
+  // { href: '/send-email', label: 'Send Email', icon: <FaUser /> },
+   { href: '/new-manaully-saved-emails', label: 'Save new email in db', icon: <FaUser /> },
+ { href: '/users', label: 'Customers', icon: <FaUser /> },
+  { href: '/orders', label: 'Orders', icon: <FaClipboardList /> },
+ 
+  ];
 
 // OLD routes – under /bulk
 const oldNavItems = advanceNavItems.map(item => ({
