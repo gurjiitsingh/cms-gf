@@ -60,6 +60,25 @@ const InactiveCustomersList = () => {
   const router = useRouter();
   const lc = lastCampaign?.emails?.length ?? 0;
 
+//     useEffect(() => {
+//   const stored = localStorage.getItem('selectedTestEmails');
+//   if (stored) {
+//     try {
+//       const parsed = JSON.parse(stored);
+//       if (Array.isArray(parsed)) {
+//         setSelectedTestEmails(parsed);
+//       }
+//     } catch (e) {
+//       console.warn('Invalid test email data in localStorage');
+//     }
+//   }
+// }, []);
+
+
+// useEffect(() => {
+//   localStorage.setItem('selectedTestEmails', JSON.stringify(selectedTestEmails));
+// }, [selectedTestEmails]);
+
   useEffect(() => {
     const fetchUnsubscribed = async () => {
       try {
@@ -149,6 +168,9 @@ const InactiveCustomersList = () => {
         : [...prev, email]
     );
   };
+
+
+
 
   return (
     <div className="mt-2">

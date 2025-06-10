@@ -17,7 +17,7 @@ export async function POST(req: Request) {
           { email: "gurjiitsingh2@gmail.com", name: "Gurjit Singh" }
         ],
         subject,
-        htmlContent: template,
+        htmlContent: "this it test",
       
       }),
     });
@@ -27,6 +27,8 @@ export async function POST(req: Request) {
       console.error('Brevo API error:', errorData);
       return new Response(JSON.stringify({ message: 'Error sending email' }), { status: 500 });
     }
+
+    
 
     return new Response(JSON.stringify({ message: 'Email sent successfully' }), { status: 200 });
   } catch (error) {
