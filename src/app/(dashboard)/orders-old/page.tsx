@@ -24,14 +24,26 @@ export default function OrderList() {
   const [hasMore, setHasMore] = useState(false);
 
   useEffect(() => {
+
+    
     fetchOrders();
   }, []);
 
   const fetchOrders = async () => {
     setLoading(true);
 
+
+//     const snapshot = await getDocs(collection(db, 'orderMasterDummy'));
+// console.log('Total docs:', snapshot.size);
+
+
+const collectionRef1 = collection(db, 'orderMasterDummy1');
+      const baseQuery = query(collectionRef1);
+      const snapshot1 = await getDocs(baseQuery);
+console.log('Total docs:', snapshot1.size);
+
     try {
-      const collectionRef = collection(db, 'orderMaster');
+      const collectionRef = collection(db, 'orderMasterDummy1');
       const baseQuery = query(collectionRef, orderBy('srno', 'desc'), limit(20));
       const snapshot = await getDocs(baseQuery);
 
@@ -55,7 +67,7 @@ export default function OrderList() {
     setLoading(true);
 
     try {
-      const collectionRef = collection(db, 'orderMaster');
+      const collectionRef = collection(db, 'orderMasterDummy1');
       const nextQuery = query(
         collectionRef,
         orderBy('srno', 'desc'),
@@ -86,7 +98,7 @@ export default function OrderList() {
     if (!confirmDelete) return;
 
     try {
-      const q = query(collection(db, 'orderMaster'), where('userId', '==', userIdToDelete));
+      const q = query(collection(db, 'orderMasterDummy1'), where('userId', '==', userIdToDelete));
       const snapshot = await getDocs(q);
 
       if (snapshot.empty) {
@@ -95,7 +107,7 @@ export default function OrderList() {
       }
 
       const deletePromises = snapshot.docs.map((docSnap) =>
-        deleteDoc(doc(db, 'orderMaster', docSnap.id))
+        deleteDoc(doc(db, 'orderMasterDummy1', docSnap.id))
       );
       await Promise.all(deletePromises);
 

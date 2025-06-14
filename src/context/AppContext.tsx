@@ -48,7 +48,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [manualEmails, setManualEmailsState] = useState<string>('');
   const [emailsToRemove, setEmailsToRemoveState] = useState<string>('');
 
-  console.log("recipients------------------",recipients)
+  
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -83,7 +83,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         emailsToRemove,
       })
     );
-  //  console.log("recipients------------", recipients);
+
   }, [recipients, coupons, template, lastCampaign, manualEmails, emailsToRemove]);
 
   // Setters

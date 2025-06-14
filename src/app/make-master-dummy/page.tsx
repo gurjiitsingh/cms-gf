@@ -62,7 +62,7 @@ export default function TransferOrderToDummy() {
       ? Timestamp.fromDate(new Date(data.createdAt))
       : Timestamp.now(); // fallback if undefined or invalid
 
-  await addDoc(collection(db, "orderMasterDummy"), {
+  await addDoc(collection(db, "orderMasterDummy1"), {
     ...data,
     createdAt,
   });

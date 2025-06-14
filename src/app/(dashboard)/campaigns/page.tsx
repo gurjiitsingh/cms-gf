@@ -28,9 +28,10 @@ export default function Campaigns() {
   // }
 const templateId =  1;
   try {
-     const res = await fetch("/api/send-marketing-emails", {
-  //  const res = await fetch("/api/zoho/sendEmail", {
-  //  const res = await fetch("/api/brevo", {
+    // const res = await fetch("/api/send-marketing-emails", {
+   // const res = await fetch("/api/zoho/sendEmail", {
+   const res = await fetch("/api/brevo", {
+  // const res = await fetch("/api/mailersend", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

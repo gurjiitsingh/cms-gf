@@ -3,7 +3,7 @@ import { Timestamp } from "firebase/firestore";
 export type orderMasterDataT = {
   id: string;
   customerName: string;
- // email:string;
+  email:string;
   userId: string;
   addressId: string;
   time: string;

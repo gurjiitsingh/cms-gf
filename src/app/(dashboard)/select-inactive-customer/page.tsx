@@ -242,7 +242,7 @@ const InactiveCustomersList = () => {
             value={inactiveDays}
             onChange={(e) => setInactiveDays(Number(e.target.value))}
           >
-            {[1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 20, 30, 40, 50, 60].map((d) => (
+            {[1, 2, 3, 4,5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 20, 30, 40, 50, 60].map((d) => (
               <option key={d} value={d}>
                 {d} days
               </option>

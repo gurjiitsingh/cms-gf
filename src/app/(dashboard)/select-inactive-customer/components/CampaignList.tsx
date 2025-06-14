@@ -60,7 +60,7 @@ export default function CampaignList() {
     setOldRecipients(filteredEmails);
   }, [filteredEmails, setOldRecipients]);
 
-  const dayOptions = [1, 2, 3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  const dayOptions = [1, 2, 3, 5,6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
   return (
     <div className="">
