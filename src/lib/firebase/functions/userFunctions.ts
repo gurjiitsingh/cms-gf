@@ -18,9 +18,20 @@ export async function fetchAllUsers(): Promise<userType[]> {
   return data;
 }
 
+// /lib/firebase/functions/userFunctions.ts
+
+
+export async function fetchAllEmails() {
+  const snapshot = await getDocs(collection(db, 'user'))
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as userType[]
+}
 
 
 
+export async function getTotalUsersCount(): Promise<number> {
+  const snapshot = await getDocs(collection(db, 'user'))
+  return snapshot.size
+}
 
 export async function fetchPaginatedUsers(
   pageSize: number,

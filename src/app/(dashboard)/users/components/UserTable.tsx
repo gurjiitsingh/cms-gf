@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { userType } from '@/lib/types/userType'
-import { fetchPaginatedUsers } from '@/lib/firebase/functions/userFunctions'
+import { fetchPaginatedUsers, getTotalUsersCount } from '@/lib/firebase/functions/userFunctions'
 
 const PAGE_SIZE = 10
 
@@ -15,6 +15,10 @@ export default function CustomerTable() {
   const [prevStack, setPrevStack] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
+  // New state for total user count
+  const [totalUsers, setTotalUsers] = useState<number | null>(null)
+  const [countLoading, setCountLoading] = useState(false)
+
   useEffect(() => {
     loadCustomers()
   }, [])
@@ -22,7 +26,11 @@ export default function CustomerTable() {
   const loadCustomers = async (direction: 'next' | 'prev' | 'init' = 'init') => {
     setLoading(true)
     try {
-      const { users, lastDoc, hasMore } = await fetchPaginatedUsers(PAGE_SIZE, direction === 'next' ? lastVisible : null, direction === 'prev' ? prevStack[prevStack.length - 2] : null)
+      const { users, lastDoc, hasMore } = await fetchPaginatedUsers(
+        PAGE_SIZE,
+        direction === 'next' ? lastVisible : null,
+        direction === 'prev' ? prevStack[prevStack.length - 2] : null
+      )
 
       setCustomers(users)
       setHasNext(hasMore)
@@ -46,9 +54,33 @@ export default function CustomerTable() {
     setLoading(false)
   }
 
+  const handleShowTotalUsers = async () => {
+    setCountLoading(true)
+    try {
+      const count = await getTotalUsersCount()
+      setTotalUsers(count)
+    } catch (error) {
+      console.error('Error fetching total users:', error)
+    }
+    setCountLoading(false)
+  }
+
   return (
     <div className="p-4 max-w-6xl mx-auto bg-white shadow rounded-lg">
-      <h1 className="text-xl font-semibold mb-4">Customer List</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-xl font-semibold">Customer List</h1>
+        {totalUsers !== null ? (
+          <span className="text-sm text-gray-600">Total Users: {totalUsers}</span>
+        ) : (
+          <button
+            onClick={handleShowTotalUsers}
+            disabled={countLoading}
+            className="text-sm px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+          >
+            {countLoading ? 'Loading...' : 'Show Total Users'}
+          </button>
+        )}
+      </div>
 
       {loading ? (
         <p>Loading customers...</p>

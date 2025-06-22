@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           sender: {
-            name: "masala-bs.de",
+            name: "masala-gf.de",
             email: "info@masalabs.store", // must be verified sender in Brevo
           },
           to:  [{ email: recipient }],

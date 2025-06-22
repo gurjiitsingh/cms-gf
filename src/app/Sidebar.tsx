@@ -14,23 +14,47 @@ import {
   FaListUl,
 } from 'react-icons/fa';
 
-const advanceNavItems = [
+// Section: General
+const generalMenu = [
   { href: '/', label: 'Home', icon: <FaHome /> },
+];
+
+// Section: Advance Campaign Mode
+const advanceCampaign = [
+  { href: '/recent-campaigns', label: 'Campaigns', icon: <FaEnvelope /> },
+  { href: '/view-lists', label: 'Contact Lists', icon: <FaEnvelope /> },
+];
+
+// Section: Auto Campaign Mode
+const autoCampaign = [
   { href: '/campaigns', label: 'Campaigns', icon: <FaEnvelope /> },
   { href: '/campaigns/view', label: 'Campaigns View', icon: <FaEnvelope /> },
   { href: '/inactive-customers', label: 'Inactive Customers', icon: <FaCalendarTimes /> },
   { href: '/new-manaully-saved-emails', label: 'Save new email in db', icon: <FaUser /> },
-  { href: '/users', label: 'Customers', icon: <FaUser /> },
-  { href: '/orders', label: 'Orders', icon: <FaClipboardList /> },
-];
-
-// Add Contacts section with sub-tabs
-const contactNavItems = [
-  { href: '/', label: 'Contacts', icon: <FaAddressBook /> },
   { href: '/manage-lists', label: 'Manage List', icon: <FaListUl /> },
 ];
 
-const oldNavItems = advanceNavItems.map((item) => ({
+// Section: Sale
+const sale = [
+   { href: '/orders', label: 'Orders', icon: <FaClipboardList /> },
+  { href: '/sale', label: 'Sale Summary', icon: <FaClipboardList /> },
+  { href: '/sale-by-mont', label: 'Sale Detail', icon: <FaClipboardList /> },
+];
+
+// Section: Customers
+const customerItems = [
+  { href: '/users', label: 'All Customers', icon: <FaUser /> },
+  { href: '/users/search-by-name', label: 'Search Customers', icon: <FaUser /> },
+  { href: '/show-customer-order-once', label: 'New Customers', icon: <FaUser /> },
+  { href: '/show-order-by-customer', label: 'Cus Order Count', icon: <FaClipboardList /> },
+ { href: '/inactive-customers', label: 'Inactive Customers', icon: <FaCalendarTimes /> },
+ 
+];
+
+
+
+// Section: Transformed Old Mode
+const oldNavItems = autoCampaign.map((item) => ({
   ...item,
   href: '/bulk' + (item.href === '/' ? '' : item.href),
 }));
@@ -53,7 +77,25 @@ export default function Sidebar() {
     localStorage.setItem('emailMode', mode);
   }, [mode]);
 
-  const navItems = mode === 'advance' ? advanceNavItems : oldNavItems;
+  const navItems = mode === 'advance' ? advanceCampaign : oldNavItems;
+
+  const renderNavLinks = (items: typeof navItems) =>
+    items.map((item) => {
+      const isActive = pathname === item.href;
+      return (
+        <Link
+          key={item.href}
+          href={item.href}
+          className={`flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
+            isActive ? 'bg-green-600 shadow-inner' : 'hover:bg-green-700 hover:pl-5'
+          }`}
+          onClick={() => setIsMobileOpen(false)}
+        >
+          <span className="text-lg">{item.icon}</span>
+          <span>{item.label}</span>
+        </Link>
+      );
+    });
 
   return (
     <>
@@ -78,9 +120,7 @@ export default function Sidebar() {
         <div className="flex justify-center gap-4 p-4">
           <button
             className={`px-4 py-2 rounded font-semibold transition-colors duration-200 ${
-              mode === 'old'
-                ? 'bg-green-600 shadow-inner'
-                : 'bg-green-700 hover:bg-green-600'
+              mode === 'old' ? 'bg-green-600 shadow-inner' : 'bg-green-700 hover:bg-green-600'
             }`}
             onClick={() => setMode('old')}
           >
@@ -98,47 +138,30 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {/* Nav items */}
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
-                  isActive ? 'bg-green-600 shadow-inner' : 'hover:bg-green-700 hover:pl-5'
-                }`}
-                onClick={() => setIsMobileOpen(false)}
-              >
-                <span className="text-lg">{item.icon}</span>
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
+        {/* General */}
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto min-h-screen ">
+          {renderNavLinks(generalMenu)}
 
-          {/* Contacts Section */}
+          {/* Dynamic campaign section */}
+          {renderNavLinks(navItems)}
+
+          {/* Customer Section */}
           <div className="mt-6 pt-4 border-t border-green-700">
             <div className="text-sm uppercase tracking-wider text-green-300 mb-2 px-4">
-              Contacts
+              Customer
             </div>
-            {contactNavItems.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-4 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive ? 'bg-green-600 shadow-inner' : 'hover:bg-green-700 hover:pl-5'
-                  }`}
-                  onClick={() => setIsMobileOpen(false)}
-                >
-                  <span className="text-base">{item.icon}</span>
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
+            {renderNavLinks(customerItems)}
           </div>
+
+          {/* Sale Section */}
+          <div className="mt-6 pt-4 border-t border-green-700">
+            <div className="text-sm uppercase tracking-wider text-green-300 mb-2 px-4">
+              Sales
+            </div>
+            {renderNavLinks(sale)}
+          </div>
+
+         
         </nav>
 
         <div className="p-4 text-sm text-green-100 border-t border-green-700">
