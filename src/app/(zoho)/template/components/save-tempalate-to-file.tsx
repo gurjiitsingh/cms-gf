@@ -5,40 +5,43 @@ import { useAppContext } from '@/context/AppContext';
 import { useRouter } from 'next/navigation';
 
 export default function SaveTemplateToFileAndUrlToCampaign() {
-  const { templateMarketing, setTemplateUrl } = useAppContext();
+  const { templateMarketing, setTemplateUrl,campaignInfo } = useAppContext();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+const campaignName = campaignInfo?.campaignName;
+  console.log("save template to file-------")
 
-  console.log("templateForUrl-------", templateMarketing)
+ const handleSubmit = async () => {
+  if (!templateMarketing) {
+    alert('No template selected');
+    return;
+  }
 
-  const handleSubmit = async () => {
-    if (!templateMarketing) {
-      alert('No template selected');
-      return;
-    }
+  setLoading(true);
+  try {
+    const res = await fetch('/api/zoho/template/save-as-file', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...templateMarketing,      // includes templateId and content
+        campaignName,              // ✅ explicitly added
+      }),
+    });
 
-    setLoading(true);
-    try {
-      const res = await fetch('/api/zoho/template/save-to-file', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(templateMarketing),
-      });
+    if (!res.ok) throw new Error('Failed to save template');
 
-      if (!res.ok) throw new Error('Failed to save template');
+    const { url } = await res.json();
+    setTemplateUrl(url);
+    router.push('/create-campaign');
+  } catch (error) {
+    console.error(error);
+    alert('Error saving template');
+  } finally {
+    setLoading(false);
+  }
+};
 
-      const { url } = await res.json();
-     setTemplateUrl(url)
-     router.push('/create-campaign');
-    // setSavedUrl(url);
-    } catch (error) {
-      console.error(error);
-      alert('Error saving template');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="p-4 border rounded space-y-4">

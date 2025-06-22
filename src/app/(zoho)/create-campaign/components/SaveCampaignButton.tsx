@@ -42,7 +42,8 @@ export default function SaveCampaignButton() {
       });
 
       const data = await res.json();
-      setResponse(data);
+      console.log("data---------", data)
+      setResponse(data.result);
       alert("✅ Campaign created successfully.");
     } catch (err) {
       console.error("Error:", err);

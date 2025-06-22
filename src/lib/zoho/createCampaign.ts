@@ -20,7 +20,7 @@ export async function createZohoCampaign(
       campaignname: payload.campaignname,
       from_email: payload.from_email,
       subject: payload.subject,
-      content_url: "payload.content_url",
+      content_url: payload.content_url,
       list_details: JSON.stringify(payload.list_details),
       topicId: payload.topicId,
     });

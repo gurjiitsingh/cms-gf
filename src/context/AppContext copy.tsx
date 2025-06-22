@@ -77,62 +77,54 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [emailsToRemove, setEmailsToRemoveState] = useState<string>('')
   const [contactListForCampaign, setContactListForCampaignState] = useState<ContactListType[]>([])
 
-  // Load context from localStorage once on mount
+  // Load from localStorage
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('appContext')
-      if (!saved) return
-
-      const parsed = JSON.parse(saved)
-
-      if (Array.isArray(parsed.recipients)) setRecipientsState(parsed.recipients)
-      if (Array.isArray(parsed.recipientsMarketing)) setRecipientsMarketingState(parsed.recipientsMarketing)
-      if (Array.isArray(parsed.oldRecipients)) setOldRecipientsState(parsed.oldRecipients)
-      if (Array.isArray(parsed.coupons)) setCouponsState(parsed.coupons)
-      if (Array.isArray(parsed.couponsMarketing)) setCouponsMarketingState(parsed.couponsMarketing)
-      if (parsed.template?.templateId && parsed.template?.content) setTemplateState(parsed.template)
-      if (parsed.templateMarketing?.templateId && parsed.templateMarketing?.content)
-        setTemplateMarketingState(parsed.templateMarketing)
-      if (parsed.templateUrl?.templateId && parsed.templateUrl?.content)
-        setTemplateStateForUrl(parsed.templateUrl)
-      if (parsed.lastCampaign?.emails) setLastCampaignState(parsed.lastCampaign)
-      if (
-        parsed.campaignInfo?.campaignName &&
-        parsed.campaignInfo?.campaignSubject
-      ) {
-        setCampaignInfoState(parsed.campaignInfo)
+    const saved = localStorage.getItem('appContext')
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed.recipients)) setRecipientsState(parsed.recipients)
+        if (Array.isArray(parsed.recipientsMarketing)) setRecipientsMarketingState(parsed.recipientsMarketing)
+        if (Array.isArray(parsed.oldRecipients)) setOldRecipientsState(parsed.oldRecipients)
+        if (Array.isArray(parsed.coupons)) setCouponsState(parsed.coupons)
+        if (Array.isArray(parsed.couponsMarketing)) setCouponsMarketingState(parsed.couponsMarketing)
+        if (parsed.template?.templateId && parsed.template?.content) setTemplateState(parsed.template)
+        if (parsed.templateMarketing?.templateId && parsed.templateMarketing?.content)
+          setTemplateMarketingState(parsed.templateMarketing)
+        if (parsed.templateUrl?.templateId && parsed.templateUrl?.content)
+          setTemplateStateForUrl(parsed.templateUrl)
+        if (parsed.lastCampaign?.emails) setLastCampaignState(parsed.lastCampaign)
+        if (parsed.campaignInfo?.campaignName && parsed.campaignInfo?.campaignSubject)
+          setCampaignInfoState(parsed.campaignInfo)
+        if (typeof parsed.manualEmails === 'string') setManualEmailsState(parsed.manualEmails)
+        if (typeof parsed.emailsToRemove === 'string') setEmailsToRemoveState(parsed.emailsToRemove)
+        if (Array.isArray(parsed.contactListForCampaign)) setContactListForCampaignState(parsed.contactListForCampaign)
+      } catch (e) {
+        console.error('Failed to parse appContext from localStorage:', e)
       }
-      if (typeof parsed.manualEmails === 'string') setManualEmailsState(parsed.manualEmails)
-      if (typeof parsed.emailsToRemove === 'string') setEmailsToRemoveState(parsed.emailsToRemove)
-      if (Array.isArray(parsed.contactListForCampaign)) setContactListForCampaignState(parsed.contactListForCampaign)
-    } catch (err) {
-      console.error('Failed to parse appContext from localStorage:', err)
     }
   }, [])
 
-  // Save context to localStorage when any value changes
+  // Save to localStorage
   useEffect(() => {
-    const data = {
-      recipients,
-      recipientsMarketing,
-      oldRecipients,
-      coupons,
-      couponsMarketing,
-      template,
-      templateMarketing,
-      templateUrl,
-      lastCampaign,
-      campaignInfo,
-      manualEmails,
-      emailsToRemove,
-      contactListForCampaign,
-    }
-
-    try {
-      localStorage.setItem('appContext', JSON.stringify(data))
-    } catch (err) {
-      console.error('Failed to save appContext to localStorage:', err)
-    }
+    localStorage.setItem(
+      'appContext',
+      JSON.stringify({
+        recipients,
+        recipientsMarketing,
+        oldRecipients,
+        coupons,
+        couponsMarketing,
+        template,
+        templateMarketing,
+        templateUrl,
+        lastCampaign,
+        campaignInfo,
+        manualEmails,
+        emailsToRemove,
+        contactListForCampaign,
+      })
+    )
   }, [
     recipients,
     recipientsMarketing,
@@ -149,35 +141,50 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     contactListForCampaign,
   ])
 
+  // Setters
+  const setRecipients = (val: string[]) => setRecipientsState(val)
+  const setRecipientsMarketing = (val: string[]) => setRecipientsMarketingState(val)
+  const setOldRecipients = (val: string[]) => setOldRecipientsState(val)
+  const setCoupons = (val: CouponT[]) => setCouponsState(val)
+  const setCouponsMarketing = (val: CouponT[]) => setCouponsMarketingState(val)
+  const setTemplate = (val: TemplateType) => setTemplateState(val)
+  const setTemplateMarketing = (val: TemplateType) => setTemplateMarketingState(val)
+  const setTemplateUrl = (val: TemplateType) => setTemplateStateForUrl(val)
+  const setLastCampaign = (val: CampaignType) => setLastCampaignState(val)
+  const setCampaignInfo = (val: CampaignInfoType) => setCampaignInfoState(val)
+  const setManualEmails = (val: string) => setManualEmailsState(val)
+  const setEmailsToRemove = (val: string) => setEmailsToRemoveState(val)
+  const setContactListForCampaign = (val: ContactListType[]) => setContactListForCampaignState(val)
+
   return (
     <AppContext.Provider
       value={{
         recipients,
         recipientsMarketing,
         oldRecipients,
-        setRecipients: setRecipientsState,
-        setRecipientsMarketing: setRecipientsMarketingState,
-        setOldRecipients: setOldRecipientsState,
+        setRecipients,
+        setRecipientsMarketing,
+        setOldRecipients,
         coupons,
         couponsMarketing,
-        setCoupons: setCouponsState,
-        setCouponsMarketing: setCouponsMarketingState,
+        setCoupons,
+        setCouponsMarketing,
         template,
         templateMarketing,
         templateUrl,
-        setTemplate: setTemplateState,
-        setTemplateMarketing: setTemplateMarketingState,
-        setTemplateUrl: setTemplateStateForUrl,
+        setTemplate,
+        setTemplateMarketing,
+        setTemplateUrl,
         lastCampaign,
-        setLastCampaign: setLastCampaignState,
+        setLastCampaign,
         campaignInfo,
-        setCampaignInfo: setCampaignInfoState,
+        setCampaignInfo,
         manualEmails,
-        setManualEmails: setManualEmailsState,
+        setManualEmails,
         emailsToRemove,
-        setEmailsToRemove: setEmailsToRemoveState,
+        setEmailsToRemove,
         contactListForCampaign,
-        setContactListForCampaign: setContactListForCampaignState,
+        setContactListForCampaign,
       }}
     >
       {children}

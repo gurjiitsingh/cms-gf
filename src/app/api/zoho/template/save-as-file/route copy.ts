@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     await fs.writeFile(filePath, content, 'utf-8');
 
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    const publicUrl = `${baseUrl}/template/store/${templateId}.html`;
+    const publicUrl = `https://${baseUrl}/templates/store/${templateId}.html`;
 
     return NextResponse.json({ success: true, url: publicUrl });
   } catch (error) {
