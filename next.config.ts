@@ -13,7 +13,15 @@ const nextConfig: NextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
-},
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/email-templates/:path*',
+        destination: '/email-templates/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
