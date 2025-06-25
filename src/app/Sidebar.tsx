@@ -21,15 +21,18 @@ const generalMenu = [
 
 // Section: Advance Campaign Mode
 const advanceCampaign = [
-  { href: '/recent-campaigns', label: 'Campaigns', icon: <FaEnvelope /> },
-  { href: '/view-lists', label: 'Contact Lists', icon: <FaEnvelope /> },
-];
+  { href: '/campaigns/recent-campaigns', label: 'Campaigns', icon: <FaEnvelope /> },
+  { href: '/lists/view-lists', label: 'Contact Lists', icon: <FaEnvelope /> },
+   { href: '/template/create', label: 'Create template', icon: <FaEnvelope /> },
+ { href: '/template/view-all', label: 'All templates', icon: <FaEnvelope /> },
+  ];
 
 // Section: Auto Campaign Mode
 const autoCampaign = [
-  { href: '/campaigns', label: 'Campaigns', icon: <FaEnvelope /> },
-  { href: '/campaigns/view', label: 'Campaigns View', icon: <FaEnvelope /> },
-  { href: '/inactive-customers', label: 'Inactive Customers', icon: <FaCalendarTimes /> },
+  { href: '/auto/campaigns', label: 'Campaigns', icon: <FaEnvelope /> },
+  { href: '/auto/campaigns1', label: 'Campaigns Auto', icon: <FaEnvelope /> },
+  { href: '/auto/campaigns/view', label: 'Campaigns View', icon: <FaEnvelope /> },
+  { href: '/customers/inactive', label: 'Inactive Customers', icon: <FaCalendarTimes /> },
   { href: '/new-manaully-saved-emails', label: 'Save new email in db', icon: <FaUser /> },
   { href: '/manage-lists', label: 'Manage List', icon: <FaListUl /> },
 ];
@@ -38,17 +41,21 @@ const autoCampaign = [
 const sale = [
    { href: '/orders', label: 'Orders', icon: <FaClipboardList /> },
   { href: '/sale', label: 'Sale Summary', icon: <FaClipboardList /> },
-  { href: '/sale-by-mont', label: 'Sale Detail', icon: <FaClipboardList /> },
+  { href: '/sale/by-month', label: 'Sale Detail', icon: <FaClipboardList /> },
+   { href: '/sale/by-coupon', label: 'Coupon Search', icon: <FaClipboardList /> },
 ];
 
 // Section: Customers
 const customerItems = [
   { href: '/users', label: 'All Customers', icon: <FaUser /> },
-  { href: '/users/search-by-name', label: 'Search Customers', icon: <FaUser /> },
-  { href: '/show-customer-order-once', label: 'New Customers', icon: <FaUser /> },
-  { href: '/show-order-by-customer', label: 'Cus Order Count', icon: <FaClipboardList /> },
- { href: '/inactive-customers', label: 'Inactive Customers', icon: <FaCalendarTimes /> },
- 
+   { href: '/users/address-search', label: 'Customers Address', icon: <FaUser /> },
+  { href: '/users/by-name', label: 'Search Customers', icon: <FaUser /> },
+   { href: '/users/by-month', label: 'New in month', icon: <FaUser /> },
+   { href: '/users/by-date', label: 'New in day', icon: <FaUser /> },
+  { href: '/users/new', label: 'New Customers', icon: <FaUser /> },
+ // { href: '/users/full-list', label: 'Cus Order Count', icon: <FaClipboardList /> },
+ { href: '/users/inactive', label: 'Inactive Customers', icon: <FaCalendarTimes /> },
+  { href: '/users/more', label: 'More', icon: <FaCalendarTimes /> },
 ];
 
 
@@ -56,7 +63,7 @@ const customerItems = [
 // Section: Transformed Old Mode
 const oldNavItems = autoCampaign.map((item) => ({
   ...item,
-  href: '/bulk' + (item.href === '/' ? '' : item.href),
+  href: '' + (item.href === '/' ? '' : item.href),
 }));
 
 export default function Sidebar() {
@@ -145,6 +152,14 @@ export default function Sidebar() {
           {/* Dynamic campaign section */}
           {renderNavLinks(navItems)}
 
+
+  {/* Sale Section */}
+          <div className="mt-6 pt-4 border-t border-green-700">
+            <div className="text-sm uppercase tracking-wider text-green-300 mb-2 px-4">
+              Sales
+            </div>
+            {renderNavLinks(sale)}
+          </div>
           {/* Customer Section */}
           <div className="mt-6 pt-4 border-t border-green-700">
             <div className="text-sm uppercase tracking-wider text-green-300 mb-2 px-4">
@@ -153,13 +168,7 @@ export default function Sidebar() {
             {renderNavLinks(customerItems)}
           </div>
 
-          {/* Sale Section */}
-          <div className="mt-6 pt-4 border-t border-green-700">
-            <div className="text-sm uppercase tracking-wider text-green-300 mb-2 px-4">
-              Sales
-            </div>
-            {renderNavLinks(sale)}
-          </div>
+        
 
          
         </nav>

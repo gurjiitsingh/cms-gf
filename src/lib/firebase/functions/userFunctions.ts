@@ -3,7 +3,9 @@ import { collection, getDocs, query, orderBy,
   startAfter,
   QueryDocumentSnapshot,
   DocumentData,
-  startAt } from "firebase/firestore";
+  startAt, 
+  doc,
+  deleteDoc} from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import { userType } from "@/lib/types/userType";
 
@@ -20,6 +22,20 @@ export async function fetchAllUsers(): Promise<userType[]> {
 
 // /lib/firebase/functions/userFunctions.ts
 
+/**
+ * Deletes a user document by Firestore document ID.
+ * @param userId Firestore document ID (user.id)
+ */
+export const deleteUserById = async (userId: string): Promise<void> => {
+  try {
+    const userRef = doc(db, "users", userId);
+    await deleteDoc(userRef);
+    console.log(`User with ID ${userId} deleted.`);
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw error;
+  }
+};
 
 export async function fetchAllEmails() {
   const snapshot = await getDocs(collection(db, 'user'))

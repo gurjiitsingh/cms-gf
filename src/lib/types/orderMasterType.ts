@@ -22,6 +22,7 @@ export type orderMasterDataT = {
   couponDiscountPercentL: number;
   pickUpDiscountPercentL: number;
    createdAt?: Timestamp;
+    [key: string]: any;
 };
 
 export type TOrderMaster = {

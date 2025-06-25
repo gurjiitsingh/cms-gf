@@ -44,10 +44,10 @@ type AppContextType = {
   setCouponsMarketing: (coupons: CouponT[]) => void
   template: TemplateType | null
   templateMarketing: TemplateType | null
-  templateUrl: TemplateType | null
+  templateUrl: string | null
   setTemplate: (template: TemplateType) => void
   setTemplateMarketing: (template: TemplateType) => void
-  setTemplateUrl: (templateUrl: TemplateType) => void
+  setTemplateUrl: (templateUrl: string) => void
   lastCampaign: CampaignType | null
   setLastCampaign: (campaign: CampaignType) => void
   campaignInfo: CampaignInfoType | null
@@ -70,7 +70,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [couponsMarketing, setCouponsMarketingState] = useState<CouponT[]>([])
   const [template, setTemplateState] = useState<TemplateType | null>(null)
   const [templateMarketing, setTemplateMarketingState] = useState<TemplateType | null>(null)
-  const [templateUrl, setTemplateStateForUrl] = useState<TemplateType | null>(null)
+  const [templateUrl, setTemplateStateForUrl] = useState("")
   const [lastCampaign, setLastCampaignState] = useState<CampaignType | null>(null)
   const [campaignInfo, setCampaignInfoState] = useState<CampaignInfoType | null>(null)
   const [manualEmails, setManualEmailsState] = useState<string>('')

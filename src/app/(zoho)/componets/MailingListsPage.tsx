@@ -68,7 +68,7 @@ export default function MailingListsPage() {
   };
 
   const handleSave = () => {
-    router.push('/create-campaign');
+    router.push('/campaigns/create-campaign');
   };
 
   return (

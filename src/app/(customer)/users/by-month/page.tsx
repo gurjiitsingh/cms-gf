@@ -1,0 +1,173 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { db } from '@/lib/firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
+import Link from 'next/link';
+import { Plus } from 'lucide-react';
+
+type User = {
+  username?: string;
+  email?: string;
+  time?: string; // e.g., '7. Mai 2025, 19:43'
+  id: string;
+};
+
+// Parse German-formatted date string to JS Date object
+function parseGermanDate(dateStr: string): Date | null {
+  try {
+    return new Intl.DateTimeFormat('de-DE').formatToParts(new Date(dateStr)).length > 0
+      ? new Date(dateStr)
+      : null;
+  } catch {
+    // Fallback for non-ISO formatted strings
+    const parts = dateStr?.match(/(\d{1,2})\.\s(\w+)\s(\d{4}),\s(\d{1,2}):(\d{2})/);
+    if (!parts) return null;
+
+    const [, day, monthName, year, hour, minute] = parts;
+    const monthsDE = [
+      'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
+      'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'
+    ];
+    const month = monthsDE.indexOf(monthName);
+    if (month === -1) return null;
+
+    return new Date(Number(year), month, Number(day), Number(hour), Number(minute));
+  }
+}
+
+export default function UsersByMonth() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [grouped, setGrouped] = useState<{ [month: string]: User[] }>({});
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        const snapshot = await getDocs(collection(db, 'user'));
+        const usersData: User[] = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        })) as User[];
+
+        setUsers(usersData);
+        groupByMonth(usersData);
+      } catch (err) {
+        console.error('Failed to fetch users:', err);
+        setError('Failed to load users');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const groupByMonth = (users: User[]) => {
+    const groupedData: { [month: string]: User[] } = {};
+
+    users.forEach((user) => {
+      if (!user.time) return;
+
+      const date = parseGermanDate(user.time);
+      if (!date) return;
+
+      const monthKey = date.toLocaleString('de-DE', {
+        month: 'long',
+        year: 'numeric',
+      });
+
+      if (!groupedData[monthKey]) groupedData[monthKey] = [];
+      groupedData[monthKey].push(user);
+    });
+
+    setGrouped(groupedData);
+
+    // Auto-select latest month
+    const monthsSorted = Object.keys(groupedData).sort((a, b) => {
+      const dateA = new Date(`01 ${a}`);
+      const dateB = new Date(`01 ${b}`);
+      return dateB.getTime() - dateA.getTime();
+    });
+
+    if (monthsSorted.length > 0) setSelectedMonth(monthsSorted[0]);
+  };
+
+  const selectedUsers = selectedMonth
+    ? [...(grouped[selectedMonth] || [])].sort((a, b) => {
+        const dateA = parseGermanDate(a.time || '')?.getTime() || 0;
+        const dateB = parseGermanDate(b.time || '')?.getTime() || 0;
+        return dateB - dateA;
+      })
+    : [];
+
+  return (
+    <div className="max-w-5xl mx-auto p-6 bg-white border rounded-lg shadow">
+    
+ <div className="flex items-center justify-between mb-4">
+        <h1 className="text-xl font-semibold">
+          Users by Month
+        </h1>
+        <Link
+          href="/users/by-month/actions"
+          className="inline-flex items-center gap-2 text-sm px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          <Plus className="w-4 h-4" />
+         Actions
+        </Link>
+      </div>
+
+
+
+      {loading && <p className="text-gray-500">Loading users...</p>}
+      {error && <p className="text-red-600">{error}</p>}
+
+      {!loading && Object.keys(grouped).length > 0 && (
+        <div className="mb-6">
+          <label className="block mb-2 text-sm font-medium text-gray-600">Select Month:</label>
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="border rounded px-3 py-2"
+          >
+            {Object.keys(grouped).map((month) => (
+              <option key={month} value={month}>
+                {month}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {!loading && selectedUsers.length === 0 && <p>No users for this month.</p>}
+
+      {!loading && selectedUsers.length > 0 && (
+        <div className="overflow-x-auto mt-4">
+          <table className="w-full border text-left">
+            <thead className="bg-gray-100 text-gray-700">
+              <tr>
+                <th className="py-2 px-4 border">#</th>
+                <th className="py-2 px-4 border">Name</th>
+                <th className="py-2 px-4 border">Email</th>
+                <th className="py-2 px-4 border">Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedUsers.map((user, index) => (
+                <tr key={user.id} className="hover:bg-gray-50">
+                  <td className="py-2 px-4 border">{index + 1}</td>
+                  <td className="py-2 px-4 border">{user.username || '—'}</td>
+                  <td className="py-2 px-4 border">{user.email || '—'}</td>
+                  <td className="py-2 px-4 border">{user.time || '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
