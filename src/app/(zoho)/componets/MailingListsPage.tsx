@@ -81,7 +81,7 @@ export default function MailingListsPage() {
           onClick={handleSave}
           className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-4 py-2 rounded shadow"
         >
-          Save
+          Add to Campaign
         </button>
       </div>
 

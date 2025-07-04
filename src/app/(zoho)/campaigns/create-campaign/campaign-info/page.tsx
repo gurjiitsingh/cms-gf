@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAppContext } from '@/context/AppContext'
 
@@ -9,7 +9,9 @@ export default function CampaignInfoPage() {
   const { campaignInfo, setCampaignInfo } = useAppContext()
 
   const [campaignname, setCampaignName] = useState(campaignInfo?.campaignName || '')
-  const [subject, setSubject] = useState(campaignInfo?.campaignSubject || '')
+  const [subject, setSubject] = useState(
+    campaignInfo?.campaignSubject || 'Masala Taste of India'
+  )
   const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = () => {
@@ -19,7 +21,7 @@ export default function CampaignInfoPage() {
     }
 
     setCampaignInfo({ campaignName: campaignname, campaignSubject: subject })
-    router.push('/campaigns/create-campaign') // Return to campaign step screen
+    router.push('/campaigns/create-campaign')
   }
 
   return (

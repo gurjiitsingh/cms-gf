@@ -72,13 +72,22 @@ export default function TemplateList() {
 
   return (
     <div className="p-4 md:p-6">
-      <h1 className="text-2xl font-bold mb-6">Select Template to Send Campaign</h1>
+      <div className="mb-4">
+         <h2 className="text-xl font-bold mb-6 text-slate-500">You can create new Template if not in list</h2>
+    <button
+      onClick={() => router.push('/template/create/select-option')}
+      className="bg-green-300 text-white py-1 px-2  rounded hover:bg-green-500 transition"
+    >
+      ➕ Create New Template
+    </button>
+  </div>
+      <h2 className="text-2xl font-bold mb-6 text-slate-500">Select Template from list to Send Campaign</h2>
 
       {selectedTemplateId && (
         <div className="mb-6">
           <button
             onClick={handleUseTemplate}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
           >
             Use Selected Template
           </button>

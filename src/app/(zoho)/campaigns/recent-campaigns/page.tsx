@@ -24,6 +24,7 @@ export default function RecentCampaignsPage() {
       });
 
       const data = await res.json();
+   //   console.log("data--------------", data)
       if (!res.ok) throw new Error(data.error || 'Unknown error');
       setCampaigns(data.campaigns.recent_campaigns || []);
     } catch (err: any) {
@@ -32,18 +33,38 @@ export default function RecentCampaignsPage() {
       setLoading(false);
     }
   };
+console.log("campaigns---------------", campaigns)
+  // const formatDateTime = (dateStr: string) => {
+  //   if (!dateStr) return 'N/A';
+  //   const parsed = new Date(dateStr);
+  //   return parsed.toLocaleString(undefined, {
+  //     day: '2-digit',
+  //     month: 'short',
+  //     year: 'numeric',
+  //     hour: '2-digit',
+  //     minute: '2-digit',
+  //   });
+  // };
 
-  const formatDateTime = (dateStr: string) => {
-    if (!dateStr) return 'N/A';
-    const parsed = new Date(dateStr);
-    return parsed.toLocaleString(undefined, {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+
+  const formatDateTime = (input: string | number) => {
+  if (!input) return 'N/A';
+
+  // Convert to number if it's a string
+  const timestamp = typeof input === 'string' ? parseInt(input, 10) : input;
+
+  const parsed = new Date(timestamp);
+
+  if (isNaN(parsed.getTime())) return 'Invalid Date';
+
+  return parsed.toLocaleString(undefined, {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
 
   return (
     <div id="campaignListView" className="max-w-6xl mx-auto p-6">
@@ -69,9 +90,9 @@ export default function RecentCampaignsPage() {
                 const status = c.campaign_status;
                 const isSent = status === 'Sent';
                 const statusColor = isSent ? 'bg-green-500' : 'bg-slate-400';
-                const statusText = isSent
-                  ? `Sent: ${formatDateTime(c.sent_time)}`
-                  : `Draft: ${formatDateTime(c.created_date_string)}`;
+               const statusText = isSent
+  ? `Sent: ${c.sent_date_string || formatDateTime(c.sent_time)}`
+  : `Draft: ${c.created_date_string || formatDateTime(c.created_time)}`;
 
                 return (
                   <li
