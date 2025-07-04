@@ -87,7 +87,7 @@ export default function TemplateList() {
         <div className="mb-6">
           <button
             onClick={handleUseTemplate}
-            className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            className="bg-amber-500 text-slate-600 px-4 py-2 rounded hover:bg-red-700 transition"
           >
             Use Selected Template
           </button>
