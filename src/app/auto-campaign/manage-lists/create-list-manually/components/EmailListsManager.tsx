@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebaseConfig';
 import { FiMail } from 'react-icons/fi';
+import Link from 'next/link';
 
 export default function EmailListsManager() {
   const [listName, setListName] = useState('');
@@ -85,6 +86,12 @@ export default function EmailListsManager() {
           Save List
         </button>
       </form>
+      {/* Back link */}
+<div className="mt-4 text-center">
+  <Link href="/auto-campaign/manage-lists" className="text-[#016630] hover:underline">
+    ← Back to Manage Lists
+  </Link>
+</div>
     </div>
   );
 }

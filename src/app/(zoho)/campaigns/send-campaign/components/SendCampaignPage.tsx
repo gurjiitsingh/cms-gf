@@ -1,14 +1,14 @@
 'use client';
 
-import {  useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
+import { useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function SendCampaignPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const campaignKey = searchParams.get("campaignkey");
+  const campaignKey = searchParams.get('campaignkey');
 
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<any>(null);
@@ -16,7 +16,7 @@ export default function SendCampaignPage() {
 
   const handleSend = async () => {
     if (!campaignKey) {
-      setError("No campaign key found in URL");
+      setError('No campaign key found in URL');
       return;
     }
 
@@ -25,14 +25,14 @@ export default function SendCampaignPage() {
     setResponse(null);
 
     try {
-      const res = await fetch("/api/zoho/sendCampaign", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/zoho/sendCampaign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ campaignkey: campaignKey }),
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to send");
+      if (!res.ok) throw new Error(data.error || 'Failed to send');
 
       setResponse(data.result);
     } catch (err: any) {
@@ -48,9 +48,10 @@ export default function SendCampaignPage() {
     }
   };
 
+  console.log("response----------", response)
   return (
     <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-orange-600 mb-4">Send Campaign</h1>
+     {!response && (  <h1 className="text-2xl font-bold text-orange-600 mb-4">Send Campaign</h1>)}
 
       {!campaignKey ? (
         <p className="text-red-500">Campaign key not found in URL.</p>
@@ -63,24 +64,22 @@ export default function SendCampaignPage() {
                 disabled={loading}
                 className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
               >
-                {loading ? "Sending..." : "Send Campaign"}
+                {loading ? 'Sending...' : 'Send Campaign'}
               </button>
-
-              {/* <button
-                onClick={handleEdit}
-                className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
-              >
-                Edit Campaign
-              </button> */}
             </div>
           )}
 
           {response && (
-            <div className="mt-4">
-              <h2 className="text-xl font-semibold text-green-600 mb-2">Campaign Sent Successfully</h2>
-              <pre className="bg-gray-100 p-3 rounded text-sm overflow-auto max-h-80">
-                {JSON.stringify(response, null, 2)}
-              </pre>
+            <div className="mt-6 bg-green-50 border border-green-200 rounded p-4">
+              <h2 className="text-lg font-semibold text-green-700 mb-2">
+                ✅ Campaign Sent Successfully
+              </h2>
+              <div className="text-sm text-gray-700 space-y-1">
+                <p><strong>Campaign Name:</strong> {response.campaign_name || 'N/A'}</p>
+                <p><strong>Status:</strong> {response.campaign_status || 'N/A'}</p>
+                <p><strong>Date:</strong> {new Date(response.created_time || Date.now()).toLocaleString()}</p>
+                <p><strong>Message:</strong> {response.message || 'No message returned.'}</p>
+              </div>
             </div>
           )}
 

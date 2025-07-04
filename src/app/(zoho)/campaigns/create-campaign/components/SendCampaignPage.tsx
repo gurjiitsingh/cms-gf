@@ -70,14 +70,14 @@ export default function SendCampaignPage() {
 
   return (
     <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-orange-600 mb-4">Send Campaign</h1>
-
+   {!response && (    <h1 className="text-2xl font-bold text-orange-600 mb-4">Send Campaign</h1>
+   )}
       {!campaignKey ? (
         <p className="text-red-500">Campaign key not found in URL.</p>
       ) : (
         <>
           {/* Show prefilled info from URL */}
-       <div className="mb-4 bg-white p-4 border rounded-md text-sm space-y-2 text-gray-700">
+   {!response && (     <div className="mb-4 bg-white p-4 border rounded-md text-sm space-y-2 text-gray-700">
   <h2 className="text-base font-semibold mb-2">Campaign Info</h2>
   {campaignName && (
     <div className="flex justify-between">
@@ -103,7 +103,7 @@ export default function SendCampaignPage() {
       <span>{new Date(createdDate).toLocaleString()}</span>
     </div>
   )}
-</div>
+</div>)}
 
 
           {!response && (
@@ -125,9 +125,9 @@ export default function SendCampaignPage() {
             </div>
           )}
 
-          {response && (
+          {/* {response && (
             <div className="mt-4 bg-green-50 border border-green-200 p-4 rounded text-sm space-y-2">
-              <h2 className="text-lg font-semibold text-green-700">✅ Full Campaign Response</h2>
+              <h2 className="text-lg font-semibold text-green-700">✅ Campaign Response</h2>
               {Object.entries(response).map(([key, value]) => (
                 <p key={key}>
                   <strong className="capitalize">{key.replace(/_/g, ' ')}:</strong>{' '}
@@ -136,6 +136,20 @@ export default function SendCampaignPage() {
                     : String(value)}
                 </p>
               ))}
+            </div>
+          )} */}
+
+            {response && (
+            <div className="mt-6 bg-green-50 border border-green-200 rounded p-4">
+              <h2 className="text-lg font-semibold text-green-700 mb-2">
+                ✅ Campaign Sent Successfully
+              </h2>
+              <div className="text-sm text-gray-700 space-y-1">
+                <p><strong>Campaign Name:</strong> {response.campaign_name || 'N/A'}</p>
+                <p><strong>Status:</strong> {response.campaign_status || 'N/A'}</p>
+                <p><strong>Date:</strong> {new Date(response.created_time || Date.now()).toLocaleString()}</p>
+                <p><strong>Message:</strong> {response.message || 'No message returned.'}</p>
+              </div>
             </div>
           )}
 

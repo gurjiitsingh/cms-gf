@@ -23,7 +23,8 @@ const generalMenu = [
 const advanceCampaign = [
  
   { href: '/campaigns/create-campaign', label: 'Create Campaign', icon: <FaEnvelope /> },
-   { href: '/auto-campaign/campaigns', label: 'Welcome offer', icon: <FaEnvelope /> },
+  { href: '/campaigns/recent-campaigns', label: 'All Campaigns', icon: <FaEnvelope /> },
+  { href: '/auto-campaign/campaigns', label: 'Welcome offer', icon: <FaEnvelope /> },
   // { href: '/auto-campaign/welcome-offer', label: 'Welcome Offer', icon: <FaEnvelope /> },
  
    { href: '/template/create/select-option', label: 'Create template', icon: <FaEnvelope /> },
@@ -31,7 +32,7 @@ const advanceCampaign = [
 
   { href: '/lists/view-lists', label: 'Final Lists', icon: <FaEnvelope /> },
    { href: '/auto-campaign/manage-lists', label: 'Raw List', icon: <FaListUl /> }, 
- { href: '/campaigns/recent-campaigns', label: 'All Campaigns', icon: <FaEnvelope /> },
+
 ];
 
  
@@ -47,10 +48,11 @@ const autoCampaign = [
 
 // Section: Sale
 const sale = [
-   { href: '/orders', label: 'Orders', icon: <FaClipboardList /> },
+   
   { href: '/sale', label: 'Sale Summary', icon: <FaClipboardList /> },
   { href: '/sale/by-month', label: 'Sale Detail', icon: <FaClipboardList /> },
    { href: '/sale/by-coupon', label: 'Coupon Search', icon: <FaClipboardList /> },
+   { href: '/orders', label: 'Orders', icon: <FaClipboardList /> },
 ];
 
 // Section: Customers
