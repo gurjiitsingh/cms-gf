@@ -20,8 +20,6 @@ export type InactiveCustomer = {
 };
 
 const TEST_EMAILS = [
-  'lund.ramesh@yahoo.com',
-  'vijaykumargifhorn@gmail.com',
   'gurjiitsingh2@gmail.com',
 ];
 

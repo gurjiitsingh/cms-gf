@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { collection, deleteDoc, doc, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '@/lib/firebaseConfig';
 import { FiMail, FiMoreVertical, FiTrash2 } from 'react-icons/fi'; // 🎯 icons added here
+import AddContactsForm from '@/app/(zoho)/lists/create-list/components/AddContactsForm';
 
 type EmailList = {
   id: string;
@@ -55,10 +56,10 @@ export default function SavedEmailLists() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl  py-6">
       <h2 className="text-3xl font-bold text-[#016630] mb-6 flex items-center gap-2">
         <FiMail className="text-[#016630]" size={28} />
-        Saved Email Lists
+        Raw Email Lists <div className='text-lg'>(Saved)</div> 
       </h2>
 
       {loading ? (
@@ -77,12 +78,20 @@ export default function SavedEmailLists() {
                 <div className="flex items-start gap-3">
                   <FiMail className="text-[#016630]" size={24} />
                   <div>
-                    <h3 className="text-lg font-semibold text-[#016630]">
+                    {/* <h3 className="text-lg font-semibold text-[#016630]">
                       {list.listName}
                       <span className="text-sm text-gray-600 ml-2">
                         ({list.emails.length} email{list.emails.length !== 1 && 's'})
                       </span>
-                    </h3>
+                    </h3> */}
+                      <AddContactsForm
+                                          EmailsArray={list?.emails}
+                                          listname={list?.listName}
+                                          listdescription="Imported from raw list"
+                                          onSuccess={() =>
+                                            console.log("Contacts added! Redirecting...")
+                                          }
+                                        />
                   </div>
                 </div>
 

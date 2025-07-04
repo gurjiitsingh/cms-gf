@@ -20,7 +20,7 @@ type CampaignT = {
 };
 
 export default function CampaignList() {
-  console.log("tiiii----------------")
+ 
   const [campaigns, setCampaigns] = useState<CampaignT[]>([]);
   const [groupedEmails, setGroupedEmails] = useState<Record<string, string[]>>({});
   const [daysFilter, setDaysFilter] = useState<number>(1);

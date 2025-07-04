@@ -53,7 +53,7 @@ export default function CouponBuilder() {
         ...doc.data(),
       }));
       setSavedCoupons(fetchedCoupons);
-      console.log("co--------",fetchedCoupons)
+    
     });
 
     return () => unsubscribe();
@@ -124,7 +124,7 @@ export default function CouponBuilder() {
   const handleUseSelected = () => {
     const selected = coupons.filter((c) => selectedCoupons.includes(c.id));
     setCouponsMarketing(selected);
-    router.push('/create-campaign');
+    router.push('/auto-campaign/template/create/select-template');
   };
 
   const handleExcludedChange = (id: string) => {
@@ -135,10 +135,18 @@ export default function CouponBuilder() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-8">
+        {selectedCoupons.length > 0 && (
+        <button
+          onClick={handleUseSelected}
+          className="mt-6 bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition"
+        >
+          Use Selected Coupons in Campaign
+        </button>
+      )}
            <div className="mt-8">
       
          <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-       Select Coupons 1
+       Select Coupons 
       </h2>
         <div className="space-y-4">
      {coupons
@@ -173,14 +181,7 @@ export default function CouponBuilder() {
         </div>
       </div>
 
-      {selectedCoupons.length > 0 && (
-        <button
-          onClick={handleUseSelected}
-          className="mt-6 bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition"
-        >
-          Use Selected Coupons in Campaign
-        </button>
-      )}
+    
 
       <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
         Create New Coupon

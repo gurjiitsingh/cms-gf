@@ -111,13 +111,26 @@ export default function UsersByMonth() {
         <h1 className="text-xl font-semibold">
           Users by Month
         </h1>
-        <Link
+<div className='py-2 px-2 felx flex-row gap-3 items-center justify-end  bg-amber-300'>
+ <Link
+          href="/users/by-month-send-offer"
+          className="inline-flex items-center gap-2 text-sm px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+         
+         Send offer email
+        </Link>
+
+         <Link
           href="/users/by-month/actions"
           className="inline-flex items-center gap-2 text-sm px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
-          <Plus className="w-4 h-4" />
+        
          Actions
         </Link>
+
+</div>
+
+       
       </div>
 
 

@@ -5,14 +5,13 @@ import { useAppContext } from '@/context/AppContext';
 import {
   CheckCircle,
   Users,
-  Percent,
   LayoutTemplate,
   FileText,
 } from 'lucide-react';
 
 export default function CampaignSteps() {
   const router = useRouter();
-  const { recipientsMarketing, couponsMarketing, templateMarketing } = useAppContext();
+  const { recipientsMarketing,  templateMarketing } = useAppContext();
 
   const steps = [
       {
@@ -52,7 +51,7 @@ export default function CampaignSteps() {
       description: templateMarketing ? 'Template selected.' : 'Choose a design template.',
       icon: LayoutTemplate,
       onClick: () => router.push('/template/select-for-campaign'),
-      buttonText: templateMarketing ? 'Edit Template' : 'Select Template',
+      buttonText: templateMarketing ? 'Select Template' : 'Select Template',
       completed: !!templateMarketing,
     },
   

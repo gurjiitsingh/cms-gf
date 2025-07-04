@@ -3,7 +3,7 @@ import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 
 export default function SaveCampaignButton() {
-  const { contactListForCampaign, templateUrl, campaignInfo } = useAppContext();
+  const { contactListForCampaign, templateUrl, campaignInfo, setCampaignInfo } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<any>(null);
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function SaveCampaignButton() {
 
     const payload = {
       campaignname,
-      from_email: "info@athenasgrill.de",
+      from_email: "info@masala-gf.de",
       subject,
       content_url,
       list_details,
@@ -47,6 +47,10 @@ export default function SaveCampaignButton() {
 
       // 👇 Redirect to send-campaign page with campaign key
       if (data.success && data.result?.campaignKey) {
+         setCampaignInfo({
+      campaignName: '',
+      campaignSubject: '',
+    });
    //     router.push(`/campaigns/send-campaign?campaignkey=${data.result.campaignKey}`);
 const { campaignKey, campaign_name, campaign_subject, campaign_status, created_date } = data.result;
 

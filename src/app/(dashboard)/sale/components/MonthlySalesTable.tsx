@@ -42,28 +42,29 @@ export default function MonthlySalesTable() {
 
       const salesMap: Record<string, MonthlySales> = {};
 
-      snapshot.docs.forEach((doc) => {
-        const data = doc.data() as orderMasterDataT;
-        const createdAt = (data.createdAt as Timestamp)?.toDate();
-        const endTotalG = data.endTotalG || 0;
+     snapshot.docs.forEach((doc) => {
+  const data = doc.data() as orderMasterDataT;
+  const createdAt = (data.createdAt as Timestamp)?.toDate();
+  const endTotalG = data.endTotalG || 0;
 
-        if (!createdAt) return;
+  if (!createdAt || data.status !== 'Completed') return; // ✅ Filter only completed orders
 
-        const monthKey = `${createdAt.getFullYear()}-${(createdAt.getMonth() + 1)
-          .toString()
-          .padStart(2, '0')}`;
+  const monthKey = `${createdAt.getFullYear()}-${(createdAt.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}`;
 
-        if (!salesMap[monthKey]) {
-          salesMap[monthKey] = {
-            month: monthKey,
-            totalSales: 0,
-            orderCount: 0,
-          };
-        }
+  if (!salesMap[monthKey]) {
+    salesMap[monthKey] = {
+      month: monthKey,
+      totalSales: 0,
+      orderCount: 0,
+    };
+  }
 
-        salesMap[monthKey].totalSales += endTotalG;
-        salesMap[monthKey].orderCount += 1;
-      });
+  salesMap[monthKey].totalSales += endTotalG;
+  salesMap[monthKey].orderCount += 1;
+});
+
 
       const sorted = Object.values(salesMap).sort((a, b) =>
         a.month < b.month ? 1 : -1
@@ -93,7 +94,7 @@ export default function MonthlySalesTable() {
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="totalSales" fill="#4CAF50" name="Total Sales (₹)" />
+                <Bar dataKey="totalSales" fill="#4CAF50" name="Total Sales (€)" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -102,9 +103,9 @@ export default function MonthlySalesTable() {
           <table className="min-w-full border border-gray-300 text-sm">
             <thead className="bg-gray-100">
               <tr>
-                <th className="border px-4 py-2 text-left">Month</th>
+                <th className="border px-4 py-2 text-left">Month1</th>
                 <th className="border px-4 py-2 text-left">Total Orders</th>
-                <th className="border px-4 py-2 text-left">Total Sales (₹)</th>
+                <th className="border px-4 py-2 text-left">Total Sales (€)</th>
               </tr>
             </thead>
             <tbody>
@@ -112,7 +113,7 @@ export default function MonthlySalesTable() {
                 <tr key={row.month} className="hover:bg-gray-50">
                   <td className="border px-4 py-2">{row.month}</td>
                   <td className="border px-4 py-2">{row.orderCount}</td>
-                  <td className="border px-4 py-2">₹{row.totalSales.toFixed(2)}</td>
+                  <td className="border px-4 py-2">€{row.totalSales.toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>

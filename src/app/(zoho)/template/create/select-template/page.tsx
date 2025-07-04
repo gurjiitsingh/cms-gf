@@ -2,15 +2,14 @@
 
 import React, { useState } from 'react';
 import { useAppContext } from '@/context/AppContext';
-import { useRouter } from 'next/navigation';
+
 import { getTemplateHtml } from '@/components/templates/emailTemplates';
-import SaveTemplateToFileAndUrlToCampaign from '../components/save-tempalate-to-file';
-import CreateEmailTemplate from './coponents/CreateEmailTemplate';
+import CreateEmailTemplate from '../coponents/CreateEmailTemplate';
 
 export default function TemplateSelector() {
   const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(null);
   const { setTemplateMarketing, couponsMarketing } = useAppContext();
-  const router = useRouter();
+ 
   const recipient = 'gurjiitsingh@gmal.com';
 
   const handleTemplateChange = (id: number) => {
@@ -25,7 +24,7 @@ export default function TemplateSelector() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-center">📧 Choose an Email Template</h1>
+      <h1 className="text-2xl font-bold text-center">Choose an Email Template</h1>
 
       {/* Show save component only if template is selected */}
       {selectedTemplateId && (

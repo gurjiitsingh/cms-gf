@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
     await addDoc(collection(db, "emailTemplates"), {
       name: campaignName,
       url: publicUrl,
+      content,
       createdAt: Timestamp.now(),
     });
 

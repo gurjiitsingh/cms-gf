@@ -5,8 +5,6 @@ import { addListAndContactsZoho } from "@/lib/zoho/addListAndContacts";
 export async function POST(req: NextRequest) {
   const body = await req.json(); // Expects structured body
 
-  console.log("body---------",body)
-
   const userId = "test_user_123"; // Replace with real user ID
   const accessToken = await getZohoAccessToken(userId);
 
@@ -21,7 +19,14 @@ export async function POST(req: NextRequest) {
     const response = await addListAndContactsZoho(accessToken,body);
 
     console.log("✅ Zoho Response:", response);
-    return NextResponse.json({ success: true, data: response });
+
+    if(response.status==='error'){
+return NextResponse.json({ success: false, data: response });
+    }else{
+return NextResponse.json({ success: true, data: response });
+    }
+
+    
   } catch (err: any) {
     console.error("Zoho API Error:", err?.response?.data || err.message);
 

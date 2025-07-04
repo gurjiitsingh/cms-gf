@@ -21,20 +21,28 @@ const generalMenu = [
 
 // Section: Advance Campaign Mode
 const advanceCampaign = [
-  { href: '/campaigns/recent-campaigns', label: 'Campaigns', icon: <FaEnvelope /> },
-  { href: '/lists/view-lists', label: 'Contact Lists', icon: <FaEnvelope /> },
-   { href: '/template/create', label: 'Create template', icon: <FaEnvelope /> },
- { href: '/template/view-all', label: 'All templates', icon: <FaEnvelope /> },
-  ];
+ 
+  { href: '/campaigns/create-campaign', label: 'Create Campaign', icon: <FaEnvelope /> },
+   { href: '/auto-campaign/campaigns', label: 'Welcome offer', icon: <FaEnvelope /> },
+  // { href: '/auto-campaign/welcome-offer', label: 'Welcome Offer', icon: <FaEnvelope /> },
+ 
+   { href: '/template/create/select-option', label: 'Create template', icon: <FaEnvelope /> },
+ { href: '/template/select-for-campaign', label: 'All templates', icon: <FaEnvelope /> },
 
+  { href: '/lists/view-lists', label: 'Final Lists', icon: <FaEnvelope /> },
+   { href: '/auto-campaign/manage-lists', label: 'Raw List', icon: <FaListUl /> }, 
+ { href: '/campaigns/recent-campaigns', label: 'All Campaigns', icon: <FaEnvelope /> },
+];
+
+ 
 // Section: Auto Campaign Mode
 const autoCampaign = [
-  { href: '/auto/campaigns', label: 'Campaigns', icon: <FaEnvelope /> },
-  { href: '/auto/campaigns1', label: 'Campaigns Auto', icon: <FaEnvelope /> },
-  { href: '/auto/campaigns/view', label: 'Campaigns View', icon: <FaEnvelope /> },
+  { href: '/old/campaigns', label: 'Campaigns', icon: <FaEnvelope /> },
+  { href: '/old/campaigns1', label: 'Campaigns Auto', icon: <FaEnvelope /> },
+  { href: '/old/campaigns/view', label: 'Campaigns View', icon: <FaEnvelope /> },
   { href: '/customers/inactive', label: 'Inactive Customers', icon: <FaCalendarTimes /> },
   { href: '/new-manaully-saved-emails', label: 'Save new email in db', icon: <FaUser /> },
-  { href: '/manage-lists', label: 'Manage List', icon: <FaListUl /> },
+  { href: '/old/manage-lists', label: 'Manage List', icon: <FaListUl /> },
 ];
 
 // Section: Sale
@@ -56,6 +64,10 @@ const customerItems = [
  // { href: '/users/full-list', label: 'Cus Order Count', icon: <FaClipboardList /> },
  { href: '/users/inactive', label: 'Inactive Customers', icon: <FaCalendarTimes /> },
   { href: '/users/more', label: 'More', icon: <FaCalendarTimes /> },
+
+  
+
+
 ];
 
 
