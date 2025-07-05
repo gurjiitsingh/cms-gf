@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function AddContactsPage() {
+  const router = useRouter(); // ⬅ Add router
   const [emailids, setEmailids] = useState('');
   const [listname, setListname] = useState('');
   const [signupform, setSignupform] = useState<'public' | 'private'>('private');
@@ -19,28 +21,35 @@ export default function AddContactsPage() {
     setLoading(true);
 
     const body = {
-      emailids, // comma-separated
+      emailids,
       listname,
       signupform,
       mode,
       listdescription,
     };
 
-    const res = await fetch('/api/zoho/addContacts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
+    try {
+      const res = await fetch('/api/zoho/addContacts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
 
-    const data = await res.json();
-    setLoading(false);
+      const data = await res.json();
+      setLoading(false);
 
-    if (res.ok) {
-      alert("✅ Contacts added successfully!");
-      console.log("Success Response:", data);
-    } else {
-      alert("❌ Failed: " + data.error);
-      console.error("Error Details:", data.details);
+      if (res.ok) {
+        alert("✅ Contacts added successfully!");
+        console.log("Success Response:", data);
+        router.push('/lists/view-lists'); // ⬅ Redirect here
+      } else {
+        alert("❌ Failed: " + data.error);
+        console.error("Error Details:", data.details);
+      }
+    } catch (error) {
+      setLoading(false);
+      alert("❌ Unexpected error");
+      console.error(error);
     }
   };
 

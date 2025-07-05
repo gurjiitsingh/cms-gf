@@ -15,10 +15,10 @@ const userId = "test_user_123"; // Replace with real user ID
     if (!accessToken) {
       return NextResponse.json({ error: "OAuth token not found" }, { status: 401 });
     }
-
+ console.log("accessToken fetch-----------", accessToken)
     // 2. Fetch mailing lists
     const data = await getZohoMailingLists(accessToken);
-console.log("list_of_details----------", data.list_of_details[0])
+//console.log("list_of_details----------", data.list_of_details[0])
     return NextResponse.json({ mailingLists: data.list_of_details || [] });
   } catch (error: any) {
     return NextResponse.json(
