@@ -388,8 +388,7 @@ export default function EmailTemplateGallery() {
     setSelectedIndex(index)
     const tpl = templates[index]
     const htmlContent = tpl.getHtml(imageUrl)
-     const tempId = (tpl.id).toString();;
-    
+    const tempId = (tpl.id).toString();;
     setTemplateMarketing({
       templateId: tempId,
       content: htmlContent,
@@ -398,7 +397,7 @@ export default function EmailTemplateGallery() {
 
   return (
     <div className=" space-y-6">
-      <h2 className="text-lg font-semibold">1Select Design for marketing email</h2>
+      <h2 className="text-lg font-semibold">Select Design for marketing email</h2>
       {selectedIndex !== null && (
         <div className="mt-6">
           <CreateEmailTemplate />

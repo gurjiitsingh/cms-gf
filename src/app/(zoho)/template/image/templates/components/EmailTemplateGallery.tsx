@@ -204,9 +204,62 @@ const templates = [
     </div>
   `,
 },
-  {
-    id: 3,
-    name: 'Template 3',
+   {
+  id: 3,
+  name: 'Template 3',
+  component: ({ imageUrl }: TemplateProps) => (
+    <div className="text-sm font-sans bg-teal-50 rounded shadow-md  text-gray-800">
+  
+
+      <div className="text-center ">
+        <img
+          src={imageUrl || "https://www.masala-gf.de/banner.jpg"}
+          alt="Angebot"
+          className="w-full max-w-[520px] mx-auto rounded"
+        />
+      </div>
+
+
+      <div className="text-center mt-8">
+        <a
+          href="https://www.masala-gf.de/"
+          target="_blank"
+          className="inline-block bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Jetzt besuchen: masala-gf.de
+        </a>
+      </div>
+
+      <div className="text-center text-gray-500 text-xs mt-8">
+        <p>2025 Masala Taste Of India. Alle Rechte vorbehalten.</p>
+      </div>
+    </div>
+  ),
+  getHtml: (imageUrl: string) => `
+    <div style="font-family: sans-serif; max-width:600px; margin:auto; background:#f0fdfa; padding:24px; border-radius:8px;">
+    
+
+      <div style="text-align:center; margin:24px 0;">
+        <img src="${imageUrl}" alt="Angebot" style="width:100%; max-width:520px; border-radius:8px;" />
+      </div>
+
+    
+
+      <div style="text-align:center; margin-top:32px;">
+        <a href="https://www.masala-gf.de/" target="_blank" style="background-color:#0f766e; color:white; padding:12px 24px; border-radius:6px; text-decoration:none; font-weight:bold;">
+          Jetzt besuchen: masala-gf.de
+        </a>
+      </div>
+
+      <div style="text-align:center; color:#6b7280; font-size:12px; margin-top:32px;">
+        <p style="margin:0;"> 2025 Masala Taste Of India. Alle Rechte vorbehalten.</p>
+      </div>
+    </div>
+  `,
+}, 
+{
+    id: 4,
+    name: 'Template 4',
     component: Template1,
     getHtml: (imageUrl: string) => `
       <div style="font-family: sans-serif; max-width:600px; margin:auto; background:white; padding:24px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
@@ -235,8 +288,8 @@ const templates = [
   },
 
    {
-  id: 4,
-  name: 'Template 4',
+  id: 5,
+  name: 'Template 5',
   component: ({ imageUrl }: TemplateProps) => (
     <div className="text-sm font-sans bg-teal-50 rounded shadow-md p-6 text-gray-800">
       <div className="text-center mb-6">
@@ -315,8 +368,8 @@ const templates = [
 ,
 
   {
-    id: 5,
-    name: 'Template 5',
+    id: 6,
+    name: 'Template 6',
     component: ({ imageUrl }: TemplateProps) => (
       <div className="p-6 text-sm bg-yellow-50 rounded shadow">
         <h2 className="text-xl font-semibold text-yellow-700 text-center mb-4"> Special Deal!</h2>
@@ -341,8 +394,8 @@ const templates = [
     `,
   },
   {
-    id: 6,
-    name: 'Template 6',
+    id: 7,
+    name: 'Template 7',
     component: ({ imageUrl }: TemplateProps) => (
       <div className="p-6 text-sm bg-green-50 rounded shadow">
         <h2 className="text-xl font-semibold text-green-700 text-center mb-4"> Neues Jahr, Neue Angebote</h2>

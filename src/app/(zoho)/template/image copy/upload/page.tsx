@@ -16,7 +16,7 @@ export default function UploadImageOnly() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const router = useRouter()
 
-  const handleImageUpload1 = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -44,65 +44,6 @@ export default function UploadImageOnly() {
       setUploading(false)
     }
   }
-
- const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (!file) return;
-
-  const img = new Image();
-  img.src = URL.createObjectURL(file);
-
-  img.onload = async () => {
-    const canvas = document.createElement('canvas');
-    const scaleFactor = 600 / img.width;
-    const width = 600;
-    const height = img.height * scaleFactor;
-
-    canvas.width = width;
-    canvas.height = height;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    ctx.drawImage(img, 0, 0, width, height);
-
-    // Convert canvas to JPEG Blob (80–90% quality is ideal for email)
-    canvas.toBlob(
-      async (blob) => {
-        if (!blob) return;
-
-        const formData = new FormData();
-        formData.append('file', new File([blob], file.name.replace(/\.\w+$/, '.jpg'), { type: 'image/jpeg' }));
-
-        setUploading(true);
-
-        try {
-          const res = await fetch('/api/zoho/image/upload', {
-            method: 'POST',
-            body: formData,
-          });
-
-          if (!res.ok) throw new Error('Image upload failed');
-
-          const data = await res.json();
-          const imageUrl = data.url;
-
-          setImages((prev) => [imageUrl, ...prev]);
-          setSelectedImage(imageUrl);
-        } catch (err) {
-          console.error('Upload error:', err);
-          alert('Image upload failed');
-        } finally {
-          setUploading(false);
-        }
-      },
-      'image/jpeg',
-      0.9 // JPEG quality (0.9 = 90%)
-    );
-  };
-};
-
-
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -153,15 +94,7 @@ export default function UploadImageOnly() {
         </div>
       )}
 
-      <h2 className="text-xl font-bold flex items-center justify-between">
-  Step 2: Select from the List
-  <a
-    href="/template/image/delete"
-    className="text-sm text-red-600 hover:underline font-medium"
-  >
-    🗑️ Delete Unwanted Images
-  </a>
-</h2>
+      <h2 className="text-xl font-bold">Step 2: Select from the List</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {images.map((url, index) => (
